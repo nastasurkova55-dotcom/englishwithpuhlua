@@ -1,358 +1,2337 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Пухля English — учи английский с котиком</title>
-    <style>
-        :root { --pink: #ffd1dc; --pink-light: #ffe5ec; --blue: #bde0fe; --blue-light: #e0f0ff; --purple: #cdb4db; --purple-light: #e8d5f5; --cream: #fff1e6; --text: #4a4a4a; --white: #ffffff; --shadow: 0 8px 24px rgba(0,0,0,0.1); --radius: 20px; }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, var(--pink-light), var(--blue-light), var(--purple-light)); min-height: 100vh; color: var(--text); display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .app { width: 100%; max-width: 900px; background: rgba(255,255,255,0.85); backdrop-filter: blur(10px); border-radius: var(--radius); box-shadow: var(--shadow); padding: 30px; position: relative; overflow: hidden; }
-        .hidden { display: none !important; }
-        h1, h2, h3 { color: #6b5b7b; }
-        h1 { font-size: 2.5em; text-align: center; margin-bottom: 10px; }
-        .subtitle { text-align: center; font-size: 1.1em; color: #8a7a9a; margin-bottom: 20px; }
-        .btn { background: linear-gradient(135deg, #ff9a9e, #fad0c4); border: none; padding: 12px 24px; border-radius: 50px; cursor: pointer; font-size: 1em; color: #fff; font-weight: bold; transition: all 0.3s; box-shadow: 0 4px 15px rgba(255,154,158,0.4); display: inline-block; text-align: center; margin: 5px; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(255,154,158,0.6); }
-        .btn-secondary { background: linear-gradient(135deg, #a8c0ff, #3f2b96); box-shadow: 0 4px 15px rgba(168,192,255,0.4); }
-        .btn-secondary:hover { box-shadow: 0 6px 20px rgba(168,192,255,0.6); }
-        .btn-purple { background: linear-gradient(135deg, #c471f5, #fa71cd); box-shadow: 0 4px 15px rgba(196,113,245,0.4); }
-        .btn-purple:hover { box-shadow: 0 6px 20px rgba(196,113,245,0.6); }
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 2px solid #e0d4f5; border-radius: 15px; font-size: 1em; background: var(--white); outline: none; transition: border 0.3s; }
-        input:focus, select:focus { border-color: #c471f5; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: var(--white); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer; border: 2px solid transparent; }
-        .card:hover { transform: translateY(-5px); border-color: var(--purple); }
-        .card h3 { margin-bottom: 10px; }
-        .card p { color: #888; }
-        .progress-bar { width: 100%; height: 15px; background: #f0e6ff; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #ff9a9e, #c471f5); border-radius: 10px; transition: width 0.5s; }
-        .medal { font-size: 2em; margin: 0 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-        .avatar-select { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-        .avatar-option { font-size: 3em; cursor: pointer; border: 3px solid transparent; border-radius: 50%; padding: 10px; transition: all 0.3s; background: var(--cream); }
-        .avatar-option:hover, .avatar-option.selected { border-color: #c471f5; background: var(--pink-light); transform: scale(1.1); }
-        .character-box { display: flex; align-items: center; gap: 20px; background: var(--cream); border-radius: var(--radius); padding: 20px; margin: 20px 0; }
-        .character-face { font-size: 4em; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .speech-bubble { background: var(--white); border-radius: 20px; padding: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); position: relative; flex: 1; font-size: 1.1em; line-height: 1.5; }
-        .speech-bubble::before { content: ''; position: absolute; left: -15px; top: 20px; border: 8px solid transparent; border-right-color: var(--white); }
-        .task-container { background: var(--white); border-radius: var(--radius); padding: 25px; margin: 20px 0; box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
-        .task-options { display: flex; flex-wrap: wrap; gap: 10px; margin: 15px 0; }
-        .task-option { background: var(--pink-light); border: 2px solid var(--pink); border-radius: 15px; padding: 12px 20px; cursor: pointer; transition: all 0.3s; font-size: 1em; }
-        .task-option:hover { background: var(--pink); transform: scale(1.05); }
-        .task-option.selected { background: var(--purple); color: white; border-color: var(--purple); }
-        .task-option.correct { background: #a8e6cf; border-color: #56c596; color: #2d6a4f; }
-        .task-option.wrong { background: #ffb3b3; border-color: #ff6b6b; color: #a94442; }
-        .lesson-content { background: var(--cream); border-radius: var(--radius); padding: 20px; margin: 15px 0; line-height: 1.6; }
-        .lesson-content h4 { color: #6b5b7b; margin: 15px 0 5px; }
-        .vocab-table { width: 100%; border-collapse: collapse; margin: 10px 0; }
-        .vocab-table th, .vocab-table td { border: 1px solid #e0d4f5; padding: 10px; text-align: left; border-radius: 5px; }
-        .vocab-table th { background: var(--pink-light); }
-        .test-result { text-align: center; padding: 20px; font-size: 1.5em; font-weight: bold; }
-        .score-5 { color: #2d6a4f; } .score-4 { color: #4a7c59; } .score-3 { color: #d4a373; } .score-2 { color: #e63946; }
-        .tab-nav { display: flex; gap: 10px; margin: 15px 0; flex-wrap: wrap; }
-        .tab-nav button { background: var(--cream); border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; transition: all 0.3s; font-size: 0.9em; }
-        .tab-nav button.active { background: var(--purple); color: white; }
-        .word-bank { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
-        .word-bank span { background: var(--blue-light); padding: 8px 15px; border-radius: 15px; cursor: pointer; transition: all 0.3s; user-select: none; }
-        .word-bank span:hover { background: var(--blue); }
-        .sentence-builder { min-height: 50px; border: 2px dashed var(--purple); border-radius: 15px; padding: 15px; margin: 10px 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
-        .sentence-builder span { background: var(--purple-light); padding: 8px 15px; border-radius: 15px; }
-        .error-log { background: #fff0f0; border-left: 4px solid #ff6b6b; padding: 15px; margin: 10px 0; border-radius: 10px; }
-        .achievement-log { background: #f0fff4; border-left: 4px solid #56c596; padding: 15px; margin: 10px 0; border-radius: 10px; }
-        .modal { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); display: flex; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-content { background: var(--white); border-radius: var(--radius); padding: 30px; max-width: 500px; width: 90%; box-shadow: var(--shadow); text-align: center; }
-        .fade-in { animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .shake { animation: shake 0.5s; }
-        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px); } 75% { transform: translateX(10px); } }
-        .confetti { position: fixed; top: -10px; font-size: 2em; animation: confettiFall 3s linear forwards; pointer-events: none; z-index: 999; }
-        @keyframes confettiFall { to { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
-        @media (max-width: 600px) { .app { padding: 15px; } h1 { font-size: 1.8em; } .character-face { font-size: 3em; } .grid { grid-template-columns: 1fr; } }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Businka English Club 💎</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+
+:root{
+  --bg:#eef7ff;
+  --bg2:#dceeff;
+  --card:rgba(255,255,255,.84);
+  --blue:#3478c8;
+  --blue2:#75aee8;
+  --deep:#17395f;
+  --text:#203957;
+  --muted:#7890aa;
+  --line:#cfe3f8;
+  --pink:#f2b9d2;
+  --success:#72b89c;
+  --danger:#e9859e;
+  --shadow:0 20px 60px rgba(45,94,145,.13);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:"DM Sans",sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 10%,rgba(130,193,255,.35),transparent 28%),
+    radial-gradient(circle at 90% 20%,rgba(242,185,210,.28),transparent 25%),
+    linear-gradient(135deg,var(--bg),#f7fbff);
+}
+
+button,input,textarea,select{font:inherit}
+
+button{cursor:pointer}
+
+.hidden{display:none!important}
+
+.app{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
+  width:270px;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  padding:24px 18px;
+  background:rgba(255,255,255,.75);
+  backdrop-filter:blur(22px);
+  border-right:1px solid var(--line);
+  z-index:20;
+  overflow:auto;
+}
+
+.logo{
+  font-family:"Playfair Display",serif;
+  font-size:25px;
+  color:var(--deep);
+  margin:8px 12px 28px;
+}
+
+.logo span{color:var(--blue)}
+
+.nav-title{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin:20px 12px 9px;
+}
+
+.nav button{
+  width:100%;
+  border:0;
+  background:transparent;
+  padding:12px 14px;
+  border-radius:14px;
+  text-align:left;
+  color:var(--text);
+  font-weight:600;
+  margin:2px 0;
+  transition:.2s;
+}
+
+.nav button:hover,
+.nav button.active{
+  background:#dceeff;
+  color:#2865aa;
+  transform:translateX(3px);
+}
+
+.level-btn{
+  display:flex!important;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.level-dot{
+  width:9px;
+  height:9px;
+  border-radius:50%;
+  background:#8fbce7;
+}
+
+.main{
+  margin-left:270px;
+  width:calc(100% - 270px);
+  padding:28px;
+}
+
+.topbar{
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:25px;
+}
+
+.mobile-menu{display:none}
+
+.user-mini{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  background:rgba(255,255,255,.75);
+  border:1px solid var(--line);
+  padding:8px 13px 8px 8px;
+  border-radius:30px;
+}
+
+.avatar-small{
+  width:38px;
+  height:38px;
+  display:grid;
+  place-items:center;
+  border-radius:50%;
+  background:#e7f3ff;
+  font-size:22px;
+}
+
+.content{
+  max-width:1250px;
+  margin:auto;
+}
+
+.hero{
+  border-radius:32px;
+  padding:38px;
+  min-height:260px;
+  background:
+    linear-gradient(125deg,rgba(255,255,255,.96),rgba(224,241,255,.85)),
+    radial-gradient(circle at 85% 30%,#c8e5ff,transparent 30%);
+  border:1px solid white;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+
+.hero:after{
+  content:"✦";
+  position:absolute;
+  right:70px;
+  top:25px;
+  font-size:110px;
+  color:#b7d8f7;
+  transform:rotate(15deg);
+}
+
+.kicker{
+  color:var(--blue);
+  text-transform:uppercase;
+  letter-spacing:2px;
+  font-weight:800;
+  font-size:12px;
+}
+
+h1,h2,h3{
+  font-family:"Playfair Display",serif;
+  color:var(--deep);
+}
+
+.hero h1{
+  font-size:48px;
+  max-width:700px;
+  margin:10px 0;
+}
+
+.hero p{
+  max-width:650px;
+  line-height:1.7;
+  color:#58728e;
+}
+
+.btn{
+  border:0;
+  border-radius:14px;
+  padding:13px 20px;
+  background:var(--blue);
+  color:white;
+  font-weight:700;
+  box-shadow:0 8px 20px rgba(52,120,200,.2);
+  transition:.2s;
+}
+
+.btn:hover{transform:translateY(-2px)}
+
+.btn.secondary{
+  background:white;
+  color:var(--blue);
+  border:1px solid var(--line);
+  box-shadow:none;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-top:22px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,.95);
+  border-radius:24px;
+  padding:23px;
+  box-shadow:var(--shadow);
+}
+
+.card h3{margin:4px 0 10px;font-size:21px}
+
+.card p{
+  color:#69829c;
+  line-height:1.65;
+}
+
+.stat-number{
+  font-family:"Playfair Display",serif;
+  font-size:35px;
+  color:var(--blue);
+}
+
+.progress{
+  height:8px;
+  background:#e1edf8;
+  border-radius:99px;
+  overflow:hidden;
+}
+
+.progress i{
+  display:block;
+  height:100%;
+  background:linear-gradient(90deg,#5796d5,#9bc7f0);
+  border-radius:99px;
+  transition:.5s;
+}
+
+.level-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+  margin-top:22px;
+}
+
+.level-card{
+  min-height:210px;
+  position:relative;
+  overflow:hidden;
+}
+
+.level-card .big{
+  font-size:54px;
+  font-family:"Playfair Display",serif;
+  color:#4c8bca;
+}
+
+.lesson-list{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+  margin-top:20px;
+}
+
+.lesson{
+  background:rgba(255,255,255,.85);
+  border:1px solid var(--line);
+  padding:20px;
+  border-radius:20px;
+  cursor:pointer;
+  transition:.2s;
+  position:relative;
+}
+
+.lesson:hover{
+  transform:translateY(-4px);
+  box-shadow:var(--shadow);
+}
+
+.lesson-number{
+  color:#8ca8c3;
+  font-size:12px;
+  font-weight:800;
+}
+
+.lesson h3{margin:7px 0;font-size:20px}
+
+.lesson small{color:var(--muted)}
+
+.lock{
+  position:absolute;
+  right:18px;
+  top:18px;
+}
+
+.lesson-page{
+  max-width:1050px;
+  margin:auto;
+}
+
+.lesson-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:25px;
+  margin-bottom:20px;
+}
+
+.lesson-head h1{
+  font-size:42px;
+  margin:5px 0;
+}
+
+.businka{
+  width:160px;
+  min-width:160px;
+  text-align:center;
+  padding:16px;
+  border-radius:28px;
+  background:rgba(255,255,255,.8);
+  border:1px solid white;
+  box-shadow:var(--shadow);
+}
+
+.businka .animal{
+  font-size:75px;
+  display:block;
+  filter:drop-shadow(0 10px 10px rgba(45,94,145,.12));
+}
+
+.bubble{
+  font-size:13px;
+  line-height:1.45;
+  color:#536d87;
+}
+
+.section{
+  background:rgba(255,255,255,.86);
+  border:1px solid white;
+  border-radius:25px;
+  padding:27px;
+  margin:18px 0;
+  box-shadow:var(--shadow);
+}
+
+.section-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:18px;
+}
+
+.section-title h2{margin:0;font-size:25px}
+
+.theory{
+  line-height:1.7;
+  color:#4f6a85;
+}
+
+.rule-box{
+  background:#edf7ff;
+  border-left:4px solid var(--blue);
+  padding:16px 18px;
+  border-radius:12px;
+  margin:14px 0;
+}
+
+.grammar-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:18px 0;
+  overflow:hidden;
+}
+
+.grammar-table th{
+  background:#dceeff;
+  color:#285b91;
+}
+
+.grammar-table th,
+.grammar-table td{
+  padding:12px;
+  border:1px solid #d5e7f7;
+  text-align:left;
+}
+
+.example{
+  padding:13px 15px;
+  border-radius:13px;
+  background:#f6faff;
+  margin:8px 0;
+}
+
+.example strong{color:#2868aa}
+
+.vocab-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.word{
+  padding:13px;
+  background:#f5faff;
+  border:1px solid #dfedf9;
+  border-radius:13px;
+}
+
+.word b{color:#2c68a5}
+
+.task{
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+  margin:14px 0;
+  background:#fbfdff;
+}
+
+.task-number{
+  color:#7293b0;
+  font-size:12px;
+  font-weight:800;
+  text-transform:uppercase;
+}
+
+.task h3{
+  margin:7px 0 15px;
+  font-size:20px;
+}
+
+.options{
+  display:grid;
+  gap:9px;
+}
+
+.option{
+  border:1px solid #d7e7f5;
+  background:white;
+  padding:13px 15px;
+  border-radius:13px;
+  text-align:left;
+  color:var(--text);
+  transition:.15s;
+}
+
+.option:hover{
+  border-color:#8bb9e5;
+  background:#f4faff;
+}
+
+.option.correct{
+  border-color:#72b89c;
+  background:#eaf8f1;
+}
+
+.option.wrong{
+  border-color:#e9859e;
+  background:#fff0f4;
+}
+
+.answer-input,
+.answer-area{
+  width:100%;
+  border:1px solid #cfe1f1;
+  background:white;
+  border-radius:13px;
+  padding:13px 15px;
+  outline:none;
+}
+
+.answer-area{min-height:100px;resize:vertical}
+
+.answer-input:focus,
+.answer-area:focus{border-color:#72a9dc}
+
+.feedback{
+  margin-top:12px;
+  padding:12px;
+  border-radius:12px;
+  display:none;
+  line-height:1.5;
+}
+
+.feedback.show{display:block}
+
+.feedback.good{
+  background:#eaf8f1;
+  color:#37785d;
+}
+
+.feedback.bad{
+  background:#fff0f4;
+  color:#9d4962;
+}
+
+.reading{
+  font-size:16px;
+  line-height:1.9;
+  background:#f7fbff;
+  padding:22px;
+  border-radius:17px;
+}
+
+.dialogue{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.msg{
+  max-width:80%;
+  padding:13px 16px;
+  border-radius:17px;
+  line-height:1.5;
+}
+
+.msg.b{
+  background:#e4f2ff;
+  align-self:flex-start;
+}
+
+.msg.u{
+  background:#f8e6ef;
+  align-self:flex-end;
+}
+
+.lesson-footer{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin:25px 0 50px;
+}
+
+.auth{
+  position:fixed;
+  inset:0;
+  z-index:100;
+  background:
+    radial-gradient(circle at 15% 20%,#b8dcff,transparent 30%),
+    radial-gradient(circle at 90% 80%,#f3c8dd,transparent 30%),
+    #eaf6ff;
+  display:grid;
+  place-items:center;
+  padding:20px;
+}
+
+.auth-box{
+  width:min(520px,100%);
+  background:rgba(255,255,255,.9);
+  border:1px solid white;
+  border-radius:32px;
+  padding:34px;
+  box-shadow:0 30px 100px rgba(45,94,145,.2);
+}
+
+.auth-logo{
+  text-align:center;
+  font-size:80px;
+}
+
+.auth h1{
+  text-align:center;
+  font-size:35px;
+  margin:5px 0 10px;
+}
+
+.auth p{
+  text-align:center;
+  color:#7189a2;
+  line-height:1.6;
+}
+
+.field{
+  margin:13px 0;
+}
+
+.field label{
+  display:block;
+  margin-bottom:7px;
+  font-weight:700;
+  font-size:13px;
+}
+
+.field input,
+.field select{
+  width:100%;
+  border:1px solid #cfe1f1;
+  border-radius:13px;
+  padding:13px;
+  outline:none;
+}
+
+.avatars{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+  margin-top:8px;
+}
+
+.avatar-choice{
+  padding:8px;
+  border-radius:12px;
+  border:1px solid #d7e7f5;
+  background:#f7fbff;
+  font-size:25px;
+}
+
+.avatar-choice.selected{
+  background:#dceeff;
+  border-color:#6099d0;
+}
+
+.auth-note{
+  margin-top:12px;
+  font-size:12px;
+  color:#8da0b5;
+}
+
+.toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  background:#17395f;
+  color:white;
+  padding:14px 18px;
+  border-radius:15px;
+  box-shadow:var(--shadow);
+  transform:translateY(120px);
+  opacity:0;
+  transition:.3s;
+  z-index:200;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.badge-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.badge{
+  padding:10px 13px;
+  border-radius:14px;
+  background:#edf7ff;
+  border:1px solid var(--line);
+}
+
+.dictionary{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.empty{
+  padding:40px;
+  text-align:center;
+  color:#8499ae;
+}
+
+@media(max-width:950px){
+  .sidebar{width:220px}
+  .main{margin-left:220px;width:calc(100% - 220px)}
+  .level-grid{grid-template-columns:repeat(2,1fr)}
+  .lesson-list{grid-template-columns:repeat(2,1fr)}
+  .grid{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:700px){
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s;
+    width:270px;
+  }
+  .sidebar.open{transform:translateX(0)}
+  .main{margin-left:0;width:100%;padding:15px}
+  .mobile-menu{
+    display:block;
+    border:0;
+    background:white;
+    border-radius:12px;
+    padding:10px 13px;
+  }
+  .topbar{margin-bottom:15px}
+  .hero{padding:25px}
+  .hero h1{font-size:35px}
+  .grid,.lesson-list,.level-grid,.dictionary{grid-template-columns:1fr}
+  .lesson-head{flex-direction:column}
+  .businka{width:100%;display:flex;align-items:center;gap:15px}
+  .businka .animal{font-size:55px}
+  .vocab-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
+
 <body>
-    <div class="app" id="app"></div>
-    <div class="modal hidden" id="modal">
-        <div class="modal-content" id="modalContent"></div>
+
+<div id="auth" class="auth">
+  <div class="auth-box">
+    <div class="auth-logo">🐇</div>
+    <h1>Businka English Club</h1>
+    <p>English, but make it actually understandable.</p>
+
+    <div class="field">
+      <label>Nickname</label>
+      <input id="nickname" placeholder="Например, nastya">
     </div>
 
-    <script>
-        // ========== ДАННЫЕ ==========
-        const AVATARS = ['🐱', '🐶', '🦊', '🐻', '🐰', '🐨', '🦄'];
-        const AVATAR_NAMES = ['Котик', 'Пёсик', 'Лисичка', 'Мишка', 'Зайка', 'Коала', 'Единорог'];
+    <div class="field">
+      <label>Password</label>
+      <input id="password" type="password" placeholder="Минимум 4 символа">
+    </div>
 
-        const positivePhrases = [
-            "Мур-р! Ты гений! Так держать! 😻", "Ого, да ты просто машина по изучению английского!", "Вау! Я горжусь тобой больше, чем своей бантиком!", "Правильно! Если бы у меня были лапки-руки, я бы тебе похлопала!", "Ты что, съел словарь на завтрак? Потрясающе!", "Мур-мяу! Это было великолепно!", "Я знала, что ты справишься! Ты мой любимый ученик!", "Офигенно! Даже мой хвост завертелся от радости!", "Это было так круто, что я чуть не уронила свой бантик!", "Ты сегодня в ударе! Продолжай в том же духе!", "Ахаха, да ты просто рок-звезда английского!", "Мяу! Я впечатлена! И это ещё слабо сказано!", "Так держать! Ты двигаешься к цели быстрее, чем я к миске с лососем!", "Потрясающе! Я уже вижу, как ты болтаешь с американцами!", "У тебя талант! Честно-честно!", "Вау, это было элегантнее, чем мой прыжок на подоконник!", "Ты умничка! Я бы дала тебе медаль, но ты её ещё не заработал, хе-хе!", "Так, стоп, ты что, носишь с собой Оксфордский словарь?", "Блестяще! Просто блестяще! Мой мех аж заблестел!", "Ого, да ты настоящий полиглот! Я кошка, и то так не умею!", "Правильный ответ! Ты становишься опасным для моей самооценки!", "Мур-мур-мур! Это было идеально!", "Я в восторге! Даже мои усы встали дыбом от счастья!", "Ты просто супер! Не останавливайся!", "А ты хорош! Я, пожалуй, начну брать у тебя уроки!", "Это победа! Я сейчас замурлыкаю от удовольствия!", "Ты удивительный! Мой бантик чуть не развязался от радости!", "Так держать! Ещё немного, и я начну мурлыкать тебе серенады!", "Потрясающе! Ты заслужил виртуальные обнимашки!", "Молодец! Я бы дала тебе рыбку, но у меня лапки!", "Офигеть! Ты превзошёл все мои кошачьи ожидания!", "Это было гениально! Я чуть не упала с подоконника от восторга!", "Восхитительно! Ты как глоток свежего молока для моей души!", "Ты красавчик! Я начинаю ревновать к твоему английскому!", "Невероятно! Я уже вижу, как ты получаешь Нобелевскую премию по английскому!"
-        ];
-        const negativePhrases = [
-            "Ты что, издеваешься? Это же элементарно! 😾", "Ай-ай-ай! Даже мой хвост сейчас опустился от разочарования!", "Ну ты даёшь! Я от злости чуть не съела свой бантик!", "Это провал! Мой кошачий туалет и то умнее!", "Ты серьёзно? Я думала, мы тут английский учим, а не гадаем!", "Как так можно ошибиться?! У меня шерсть дыбом!", "Нет-нет-нет! Ты меня сейчас до истерики доведёшь!", "Ауч! Это было больно для моих кошачьих ушей!", "Попробуй ещё раз, или я начну точить когти о твой стул!", "Это был промах! Я аж подпрыгнула от негодования!", "Ну и ну! Даже мой рыбный пирог знает английский лучше!", "Фу-ты! Я в шоке! Ты это серьёзно или притворяешься?", "Ошибка! Я сейчас лопну от злости, как воздушный шарик!", "Это было ужасно! У меня аж молоко скисло!", "Ты что, решил меня позлить? У тебя получается!", "Ай! Я укушу тебя за палец, если ещё раз ошибёшься!", "Кошмар! Я видела, как тараканы лучше решают тесты!", "Нет! Нет! И ещё раз нет! Соберись!", "Я в бешенстве! Сейчас разнесу тут всё в пух и прах!", "Это позор! Даже мой лоток краснеет от стыда!", "Ты что, спишь на ходу? Просыпайся!", "Ах так! Ну всё, я ухожу в закат... Шучу, я злая и останусь!", "Это была катастрофа! Я удивлена, что ты ещё жив!", "Мяу-у-у! Это был провал! Я чуть не разбила экран!", "Серьёзно?! Ты заставляешь меня сомневаться в твоём IQ!", "Фу! Я сейчас закачу глаза так, что они останутся на затылке!", "Это провал века! Я даже перестала мурлыкать!", "Ты меня разочаровываешь! Я думала, мы команда!", "Ага, конечно! А я тогда балерина!", "Это было так плохо, что я начала сомневаться в существовании гравитации!", "Ты что, специально? Я начинаю думать, что ты тайный агент по провалам!", "Ужас! Я сейчас пойду и лягу в свой лоток от отчаяния!", "Ошибка! Мой уровень стресса превысил уровень моей пушистости!"
-        ];
-        const thinkingPhrases = [
-            "Хм, подумай хорошенько... Я подожду. 😼", "Интересно, интересно... Пока ты думаешь, я полижу лапку.", "Я тут, наблюдаю за тобой... Не торопись, но и не спи.", "Мур-р... Кажется, ты на верном пути. Или нет.", "Я задумалась о смысле жизни... а ты давай, думай!", "Ты так сосредоточен, что даже мои усы замерли.", "Хм, сложный вопрос? Я бы помогла, но у меня лапки.", "Пока ты думаешь, я успела вылизать половину шерсти.", "Я слежу за тобой... и за твоими ошибками.", "Не волнуйся, я не уйду. Я же кошка, мне любопытно.", "Ты что, завис? Я вот уже десять раз успела моргнуть.", "Мурлык-мурлык... Время идёт, а ты всё думаешь.", "Я начинаю думать, что ты не знаешь ответ. Но я верю в тебя!", "Смотри не усни над заданием, а то я начну петь оперу.", "Хм, я бы на твоём месте уже ответила. Но я же кошка.", "Пока ты думаешь, я придумала новый план захвата мира.", "Ты выглядишь так, будто решаешь уравнение Эйнштейна.", "Ну же! Я уже вся извелась от ожидания!", "Мр-р-р... Не торопись. Я просто посижу тут.", "Ты знаешь ответ, я чувствую это своими усами!", "Ладно, я пошла за попкорном, пока ты думаешь.", "Если что, я рядом. Но если ошибёшься — берегись!", "Ты такой серьёзный! Я даже замерла в предвкушении.", "Ну-с, и каков твой ответ? Я вся внимание!", "Ты не поверишь, но я жду уже целую вечность!", "Пока ты думаешь, я успела придумать 10 новых способов достать лосося из холодильника.", "Я не тороплю, но мой хвост уже начал нервно подёргиваться.", "Хм, я задумалась: а кошки умнее людей? Судя по твоему лицу, нет.", "Ты смотришь на экран так, будто там спрятан ответ. Я проверяла — нет.", "Если ты сейчас ответишь правильно, я прощу тебе все прошлые ошибки."
-        ];
-        const maryPhrases = [
-            "Мэри: Ох, ну и заданьице... Я бы на твоём месте забила.", "Мэри: Смотри не ошибись, а то Пухля опять будет орать.", "Мэри: Я вообще-то тут, чтобы поддержать... наверное.", "Мэри: Даже мой готический настрой не так мрачен, как твой ответ.", "Мэри: Если что, я прикрою тебя перед Пухлей. Или нет.", "Мэри: Ты только не психуй, как Пухля.", "Мэри: Я пришла, потому что мне скучно. И потому что ты мне нравишься.", "Мэри: Знаешь, я могла бы сейчас слушать My Chemical Romance, но я тут.", "Мэри: Не подведи. А то Пухля устроит апокалипсис.", "Мэри: Твой мозг сейчас, наверное, кипит. Мой тоже, но от скуки.", "Мэри: Я в чёрном, потому что траур по твоим прошлым ошибкам.", "Мэри: Пухля опять злится? Это её обычное состояние.", "Мэри: Ты справишься, наверное. Или нет. Всё тлен.", "Мэри: Я не язвлю, я просто констатирую факты."
-        ];
-        const jackPhrases = [
-            "Джек: Гав! Ты сможешь! Я в тебя верю!", "Джек: Я бы сейчас погнался за белкой, но решил тебя поддержать!", "Джек: Отличная погода для изучения английского!", "Джек: Пухля иногда бывает злой, но ты не бойся, я рядом!", "Джек: Я худой, но умный! Поэтому слушай сюда: ты молодец!", "Джек: Гав-гав! Это значит «давай, ты сможешь» по-собачьи!", "Джек: Я только что видел, как ты думаешь. Это было красиво!", "Джек: Не отвлекайся! Я тут, чтобы ловить твои ошибки... шучу, я добрый!", "Джек: Если что, я могу принести тебе тапочки для вдохновения!", "Джек: Пухля сказала, что если ошибешься, она меня заставит мыть посуду. Так что не ошибись!", "Джек: Я гонялся за хвостом и прибежал сюда. Удачи!", "Джек: Ты такой умный, что я начинаю завидовать твоему мозгу!", "Джек: Гав! Я верю в тебя больше, чем в то, что завтра будет солнечно!"
-        ];
-        const tips = [
-            "Совет: Повторяй слова перед сном — мозг лучше запоминает.", "Совет: Смотри сериалы на английском с субтитрами.", "Совет: Учи не слова, а фразы целиком. Так быстрее заговоришь.", "Интересный факт: Английский — самый «ворующий» язык, он заимствовал слова из более чем 350 языков.", "Интересный факт: «E» — самая часто используемая буква в английском.", "Совет: Попробуй думать на английском хотя бы 10 минут в день.", "Интересный факт: Английский — официальный язык неба. Все пилоты обязаны его знать.", "Совет: Используй стикеры со словами на предметах дома.", "Интересный факт: Слово «set» имеет более 400 значений в Оксфордском словаре.", "Совет: Не бойся ошибок — их анализ помогает быстрее прогрессировать.", "Интересный факт: Американцы часто говорят «like» как слово-паразит, не замечая этого.", "Совет: Попробуй описывать свои действия на английском вслух.", "Интересный факт: В английском нет слова для «завтра» в некоторых языках, но есть «overmorrow» — послезавтра (редкое).", "Совет: Играй в видеоигры на английском — эффективно и весело.", "Интересный факт: Шекспир добавил в английский более 1700 новых слов."
-        ];
+    <div class="field">
+      <label>Возраст</label>
+      <select id="age">
+        <option value="">Выберите возраст</option>
+      </select>
+    </div>
 
-        // ========== БАЗА УРОКОВ (расширенная) ==========
-        const lessonsData = {
-            A1: [
-                { id: 'a1_1', title: 'Знакомство и семья', emoji: '👨‍👩‍👧‍👦', vocabulary: [ { en: 'mother', ru: 'мама', example: 'My mother is kind.' }, { en: 'father', ru: 'папа', example: 'Father works a lot.' }, { en: 'sister', ru: 'сестра', example: 'I have one sister.' }, { en: 'brother', ru: 'брат', example: 'My brother is funny.' }, { en: 'friend', ru: 'друг', example: 'Tom is my friend.' } ], grammar: 'Глагол to be (am/is/are). Используется для описания людей: I am, He/She is, They are.', examples: [ 'I am a student.', 'She is my sister.', 'They are my parents.' ], funFact: 'Американцы часто говорят «guys» для обращения к группе людей, даже если там только девушки!', tip: 'Чтобы запомнить: «am» — только для I, «is» — для одного человека/предмета, «are» — для нескольких.', tasks: [ { type: 'flashcards', question: 'Запомни слова: mother (мама), father (папа), sister (сестра), brother (брат), friend (друг)', options: ['Запомнил(а)', 'Повторить ещё раз'] }, { type: 'multiple_choice', question: 'Как перевести «мама»?', options: ['Mother', 'Father', 'Sister', 'Brother'], correct: 0 }, { type: 'fill_blank', question: 'I ___ a student.', correct: 'am', options: ['am', 'is', 'are'] }, { type: 'translation_ru', question: 'Переведи: «Она моя сестра.»', correct: 'she is my sister', accept: ['she is my sister', 'she\'s my sister'] }, { type: 'dialogue', question: 'Ответь на вопрос: «Do you have a brother?» (Да, есть)', correct: 'yes, i have', accept: ['yes i have', 'yes, i do', 'yes i do'] } ] },
-                { id: 'a1_2', title: 'Приветствия и знакомство', emoji: '👋', vocabulary: [ { en: 'hello', ru: 'привет', example: 'Hello, how are you?' }, { en: 'goodbye', ru: 'пока', example: 'Goodbye, see you!' }, { en: 'name', ru: 'имя', example: 'My name is Anna.' }, { en: 'nice', ru: 'приятно', example: 'Nice to meet you.' }, { en: 'thanks', ru: 'спасибо', example: 'Thanks a lot!' } ], grammar: 'Приветствия и прощания. Конструкция «Nice to meet you» — приятно познакомиться.', examples: [ 'Hello! My name is Alex.', 'Nice to meet you!', 'Goodbye! Have a nice day!' ], funFact: 'Американцы часто говорят «What\'s up?» вместо «How are you?» — это значит «Как дела?».', tip: 'Запомни: «Nice to meet you» говорится при первой встрече, а «Nice to see you» — при повторной.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Приятно познакомиться»?', options: ['Nice to meet you', 'Goodbye', 'Hello', 'Thanks'], correct: 0 }, { type: 'translation_en', question: 'Переведи на английский: «Привет, меня зовут Аня.»', correct: 'hello, my name is anya', accept: ['hello my name is anya', 'hi my name is anya', 'hi, my name is anya'] }, { type: 'fill_blank', question: '___ to meet you!', correct: 'nice', options: ['nice', 'good', 'well', 'fine'] }, { type: 'dialogue', question: 'Тебя спрашивают: «What\'s your name?» Ответь: «Меня зовут...» (напиши ответ на английском)', correct: 'my name is', accept: ['my name is'] } ] },
-                { id: 'a1_3', title: 'Еда и напитки', emoji: '🍕', vocabulary: [ { en: 'apple', ru: 'яблоко', example: 'I eat an apple.' }, { en: 'water', ru: 'вода', example: 'I drink water.' }, { en: 'bread', ru: 'хлеб', example: 'Bread is tasty.' }, { en: 'coffee', ru: 'кофе', example: 'I like coffee.' }, { en: 'pizza', ru: 'пицца', example: 'Pizza is my favorite.' } ], grammar: 'Present Simple для привычек: I like, I eat, I drink. Для he/she добавляем -s: She likes.', examples: [ 'I like coffee.', 'He drinks water.', 'We eat pizza on Fridays.' ], funFact: 'Американцы обожают кофе. Средний американец выпивает 3 чашки в день!', tip: 'Чтобы запомнить окончание -s: «Он/она любит» = «He/She likes» — всегда добавляй -s для третьего лица!', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Я люблю кофе»?', options: ['I like coffee', 'I likes coffee', 'I liking coffee', 'I am like coffee'], correct: 0 }, { type: 'fill_blank', question: 'She ___ pizza.', correct: 'likes', options: ['like', 'likes', 'liking', 'is like'] }, { type: 'translation_ru', question: 'Переведи: «We drink water.»', correct: 'мы пьем воду', accept: ['мы пьём воду', 'мы пьем воду'] }, { type: 'word_bank', question: 'Составь предложение: «I like coffee.»', words: ['I', 'coffee', 'like', 'like'], correctSentence: 'i like coffee' } ] },
-                { id: 'a1_4', title: 'Цвета и прилагательные', emoji: '🌈', vocabulary: [ { en: 'red', ru: 'красный', example: 'The apple is red.' }, { en: 'blue', ru: 'синий', example: 'The sky is blue.' }, { en: 'big', ru: 'большой', example: 'A big house.' }, { en: 'small', ru: 'маленький', example: 'A small cat.' }, { en: 'beautiful', ru: 'красивый', example: 'A beautiful flower.' } ], grammar: 'Прилагательные в английском не изменяются по родам и числам. Всегда стоят перед существительным.', examples: [ 'A big red apple.', 'She has beautiful eyes.', 'This is a small car.' ], funFact: 'В английском порядок прилагательных строгий: мнение, размер, возраст, форма, цвет, происхождение, материал, цель. Поэтому говорят «a big red apple», а не «a red big apple».', tip: 'Запомни: красивая девушка = beautiful girl (без окончаний!).', tasks: [ { type: 'multiple_choice', question: 'Как правильно: «большой красный дом»?', options: ['A big red house', 'A red big house', 'Big red a house', 'Red big a house'], correct: 0 }, { type: 'translation_en', question: 'Переведи: «Красивый цветок»', correct: 'a beautiful flower', accept: ['beautiful flower'] }, { type: 'fill_blank', question: 'The sky is ___.', correct: 'blue', options: ['blue', 'big', 'small', 'red'] } ] },
-                { id: 'a1_5', title: 'Числа и возраст', emoji: '🔢', vocabulary: [ { en: 'one', ru: 'один', example: 'I have one cat.' }, { en: 'two', ru: 'два', example: 'Two dogs.' }, { en: 'three', ru: 'три', example: 'Three birds.' }, { en: 'four', ru: 'четыре', example: 'Four chairs.' }, { en: 'five', ru: 'пять', example: 'Five fingers.' } ], grammar: 'Числительные от 1 до 10. Для возраста используем глагол to be: I am 10 years old.', examples: [ 'I am twenty years old.', 'She is five.', 'They are thirty.' ], funFact: 'В США возраст можно спрашивать только в особых случаях. Это может быть невежливо!', tip: 'Запомни: «years old» — это дословно «лет старый», но переводится как «лет».', tasks: [ { type: 'multiple_choice', question: 'Как спросить «Сколько тебе лет?»', options: ['How old are you?', 'How many years you?', 'What old are you?', 'How you old?'], correct: 0 }, { type: 'fill_blank', question: 'I am 15 ___ old.', correct: 'years', options: ['year', 'years', 'ages', 'age'] }, { type: 'translation_ru', question: 'Переведи: «She is ten.»', correct: 'ей десять', accept: ['ей 10', 'ей десять', 'она десять'] } ] },
-                { id: 'a1_6', title: 'Мой день', emoji: '⏰', vocabulary: [ { en: 'morning', ru: 'утро', example: 'I wake up in the morning.' }, { en: 'evening', ru: 'вечер', example: 'I read in the evening.' }, { en: 'breakfast', ru: 'завтрак', example: 'I eat breakfast at 7.' }, { en: 'dinner', ru: 'ужин', example: 'We have dinner together.' }, { en: 'sleep', ru: 'спать', example: 'I sleep at 10.' } ], grammar: 'Present Simple для распорядка дня. Используем: I wake up, I eat, I go.', examples: [ 'I wake up at 7 o\'clock.', 'She eats breakfast.', 'We go to school.' ], funFact: 'Англичане часто говорят "brekkie" вместо breakfast в разговорной речи.', tip: 'Распорядок дня = Present Simple, потому что это повторяется.', tasks: [ { type: 'multiple_choice', question: 'Как перевести "завтрак"?', options: ['Breakfast', 'Dinner', 'Lunch', 'Sleep'], correct: 0 }, { type: 'fill_blank', question: 'I ___ up at 7 o\'clock.', correct: 'wake', options: ['wake', 'wakes', 'waking', 'woke'] }, { type: 'translation_ru', question: 'Переведи: "We have dinner together."', correct: 'мы ужинаем вместе', accept: ['мы ужинаем вместе'] }, { type: 'word_bank', question: 'Составь: "I eat breakfast at 7."', words: ['I', 'eat', 'breakfast', 'at', '7'], correctSentence: 'i eat breakfast at 7' } ] },
-                { id: 'a1_7', title: 'Животные', emoji: '🐾', vocabulary: [ { en: 'cat', ru: 'кошка', example: 'The cat is cute.' }, { en: 'dog', ru: 'собака', example: 'The dog barks.' }, { en: 'bird', ru: 'птица', example: 'The bird sings.' }, { en: 'fish', ru: 'рыба', example: 'The fish swims.' }, { en: 'rabbit', ru: 'кролик', example: 'The rabbit jumps.' } ], grammar: 'Глагол have got для описания животных: I have got a cat, She has got a dog.', examples: [ 'I have got a dog.', 'He has got a bird.', 'They have got fish.' ], funFact: 'В английском для звуков животных используют другие слова: собака говорит "woof", а петух — "cock-a-doodle-doo".', tip: 'Запомни: "have got" = иметь. Для he/she используй "has got".', tasks: [ { type: 'multiple_choice', question: 'Как перевести "кошка"?', options: ['Cat', 'Dog', 'Bird', 'Fish'], correct: 0 }, { type: 'fill_blank', question: 'She ___ got a rabbit.', correct: 'has', options: ['has', 'have', 'is', 'are'] }, { type: 'translation_ru', question: 'Переведи: "The dog barks."', correct: 'собака лает', accept: ['собака лает'] }, { type: 'word_bank', question: 'Составь: "I have got a cat."', words: ['I', 'have', 'got', 'a', 'cat'], correctSentence: 'i have got a cat' } ] },
-                { id: 'a1_8', title: 'Одежда', emoji: '👕', vocabulary: [ { en: 'shirt', ru: 'рубашка', example: 'I wear a shirt.' }, { en: 'dress', ru: 'платье', example: 'She wears a dress.' }, { en: 'shoes', ru: 'туфли', example: 'My shoes are new.' }, { en: 'hat', ru: 'шляпа', example: 'He wears a hat.' }, { en: 'skirt', ru: 'юбка', example: 'The skirt is red.' } ], grammar: 'Указательные местоимения: this (этот), that (тот), these (эти), those (те).', examples: [ 'This is my shirt.', 'That dress is beautiful.', 'These are my shoes.' ], funFact: 'Англичане называют кроссовки "trainers", а американцы — "sneakers".', tip: 'This/these – близко, that/those – далеко.', tasks: [ { type: 'multiple_choice', question: 'Как перевести "платье"?', options: ['Dress', 'Shirt', 'Shoes', 'Hat'], correct: 0 }, { type: 'fill_blank', question: '___ is my shirt.', correct: 'this', options: ['This', 'That', 'These', 'Those'] }, { type: 'translation_ru', question: 'Переведи: "These are my shoes."', correct: 'это мои туфли', accept: ['это мои туфли'] }, { type: 'word_bank', question: 'Составь: "That dress is beautiful."', words: ['That', 'dress', 'is', 'beautiful'], correctSentence: 'that dress is beautiful' } ] },
-                { id: 'a1_9', title: 'Город и транспорт', emoji: '🏙️', vocabulary: [ { en: 'bus', ru: 'автобус', example: 'I go by bus.' }, { en: 'train', ru: 'поезд', example: 'The train is fast.' }, { en: 'shop', ru: 'магазин', example: 'The shop is open.' }, { en: 'park', ru: 'парк', example: 'We walk in the park.' }, { en: 'street', ru: 'улица', example: 'The street is busy.' } ], grammar: 'Конструкция there is / there are для описания мест: There is a park, There are shops.', examples: [ 'There is a bus stop.', 'There are many cars.', 'Is there a train station?' ], funFact: 'В Лондоне автобусы красные, а такси чёрные. Это символы города!', tip: 'There is + ед.ч., there are + мн.ч.', tasks: [ { type: 'multiple_choice', question: 'Как перевести "магазин"?', options: ['Shop', 'Park', 'Bus', 'Train'], correct: 0 }, { type: 'fill_blank', question: 'There ___ a park near my house.', correct: 'is', options: ['is', 'are', 'am', 'be'] }, { type: 'translation_ru', question: 'Переведи: "There are many cars."', correct: 'там много машин', accept: ['много машин'] }, { type: 'word_bank', question: 'Составь: "There is a bus stop."', words: ['There', 'is', 'a', 'bus', 'stop'], correctSentence: 'there is a bus stop' } ] },
-                { id: 'a1_10', title: 'Праздники', emoji: '🎉', vocabulary: [ { en: 'birthday', ru: 'день рождения', example: 'Happy birthday!' }, { en: 'party', ru: 'вечеринка', example: 'We have a party.' }, { en: 'gift', ru: 'подарок', example: 'This gift is for you.' }, { en: 'cake', ru: 'торт', example: 'The cake is sweet.' }, { en: 'celebrate', ru: 'праздновать', example: 'We celebrate together.' } ], grammar: 'Повелительное наклонение: Come!, Eat!, Dance! Используем без подлежащего.', examples: [ 'Happy birthday!', 'Let\'s celebrate!', 'Open your gift!' ], funFact: 'В Британии на день рождения именинника подбрасывают в воздух столько раз, сколько ему лет.', tip: 'Поздравление: "Happy + праздник". Например, Happy New Year!', tasks: [ { type: 'multiple_choice', question: 'Как перевести "подарок"?', options: ['Gift', 'Cake', 'Party', 'Birthday'], correct: 0 }, { type: 'fill_blank', question: '___ birthday!', correct: 'happy', options: ['Happy', 'Happiness', 'Happily', 'Happier'] }, { type: 'translation_ru', question: 'Переведи: "We celebrate together."', correct: 'мы празднуем вместе', accept: ['мы празднуем вместе'] }, { type: 'word_bank', question: 'Составь: "Happy birthday!"', words: ['Happy', 'birthday'], correctSentence: 'happy birthday' } ] }
-            ],
-            A2: [
-                { id: 'a2_1', title: 'Дом и мебель', emoji: '🏠', vocabulary: [ { en: 'kitchen', ru: 'кухня', example: 'We cook in the kitchen.' }, { en: 'bedroom', ru: 'спальня', example: 'My bedroom is cozy.' }, { en: 'sofa', ru: 'диван', example: 'The sofa is comfortable.' }, { en: 'window', ru: 'окно', example: 'Open the window, please.' }, { en: 'mirror', ru: 'зеркало', example: 'Look in the mirror.' } ], grammar: 'Предлоги места: in (в), on (на), under (под), behind (за), next to (рядом).', examples: [ 'The cat is on the sofa.', 'My keys are on the table.', 'The shoes are under the bed.' ], funFact: 'Англичане часто говорят «flat», а американцы — «apartment». Оба слова значат «квартира».', tip: 'Чтобы запомнить предлоги: представь кота Пухлю, который сидит на столе, под кроватью и за зеркалом.', tasks: [ { type: 'multiple_choice', question: 'Где кот, если он «on the sofa»?', options: ['На диване', 'Под диваном', 'За диваном', 'Рядом с диваном'], correct: 0 }, { type: 'fill_blank', question: 'The mirror is ___ the wall.', correct: 'on', options: ['on', 'in', 'under', 'behind'] }, { type: 'translation_en', question: 'Переведи: «Кухня большая.»', correct: 'the kitchen is big', accept: ['kitchen is big'] }, { type: 'dialogue', question: 'Тебя спрашивают: «Where do you live?» Ответь: «Я живу в квартире.»', correct: 'i live in an apartment', accept: ['i live in a flat', 'i live in an apartment'] } ] },
-                { id: 'a2_2', title: 'Школа и учёба', emoji: '📚', vocabulary: [ { en: 'teacher', ru: 'учитель', example: 'The teacher is strict.' }, { en: 'student', ru: 'студент', example: 'I am a student.' }, { en: 'homework', ru: 'домашнее задание', example: 'I do my homework.' }, { en: 'book', ru: 'книга', example: 'This book is interesting.' }, { en: 'lesson', ru: 'урок', example: 'The lesson is long.' } ], grammar: 'Present Continuous: I am reading, She is studying. Используем для действий в данный момент.', examples: [ 'I am reading a book now.', 'They are doing homework.', 'She is studying English.' ], funFact: 'В американских школах нет формы! Ученики ходят в чём хотят (в пределах разумного).', tip: 'Present Continuous = am/is/are + глагол с -ing. Запомни: «I am learning English» — я учу английский сейчас.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Я читаю книгу сейчас»?', options: ['I am reading a book now', 'I read a book now', 'I reading a book now', 'I is reading a book now'], correct: 0 }, { type: 'fill_blank', question: 'She ___ studying English.', correct: 'is', options: ['is', 'am', 'are', 'be'] }, { type: 'translation_ru', question: 'Переведи: «They are doing homework.»', correct: 'они делают домашнее задание', accept: ['они делают домашнюю работу'] } ] },
-                { id: 'a2_3', title: 'Погода и времена года', emoji: '☀️', vocabulary: [ { en: 'sunny', ru: 'солнечно', example: 'It is sunny today.' }, { en: 'rainy', ru: 'дождливо', example: 'It is rainy outside.' }, { en: 'snowy', ru: 'снежно', example: 'It is snowy in winter.' }, { en: 'windy', ru: 'ветрено', example: 'It is windy.' }, { en: 'cloudy', ru: 'облачно', example: 'The sky is cloudy.' } ], grammar: 'Безличные предложения с «It is» для описания погоды: It is sunny, It is raining.', examples: [ 'It is sunny and warm.', 'It is raining cats and dogs!', 'It is cloudy but not cold.' ], funFact: 'Выражение «It\'s raining cats and dogs» означает сильный дождь. Никто не знает точно, откуда оно пошло!', tip: 'Запомни: погода всегда начинается с «It is» или «It\'s».', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Сегодня солнечно»?', options: ['It is sunny today', 'Today is sunny it', 'Sunny it is today', 'Is sunny today'], correct: 0 }, { type: 'fill_blank', question: 'It is ___ in winter.', correct: 'snowy', options: ['snowy', 'sunny', 'hot', 'rainy'] }, { type: 'translation_en', question: 'Переведи: «На улице дождливо.»', correct: 'it is rainy outside', accept: ['it is rainy outside', 'it is rainy'] }, { type: 'word_bank', question: 'Составь: «It is windy today.»', words: ['windy', 'It', 'is', 'today'], correctSentence: 'it is windy today' } ] },
-                { id: 'a2_4', title: 'Покупки', emoji: '🛒', vocabulary: [ { en: 'bread', ru: 'хлеб', example: 'We need some bread.' }, { en: 'milk', ru: 'молоко', example: 'Buy some milk.' }, { en: 'cheese', ru: 'сыр', example: 'I like cheese.' }, { en: 'vegetables', ru: 'овощи', example: 'Vegetables are healthy.' }, { en: 'money', ru: 'деньги', example: 'I have no money.' } ], grammar: 'Some / any: some в утверждениях, any в вопросах и отрицаниях.', examples: [ 'I have some bread.', 'Do you have any milk?', 'There is not any cheese.' ], funFact: 'В американских супермаркетах ценники без НДС — на кассе цена окажется выше!', tip: 'Some для позитива, any для вопросов и негатива.', tasks: [ { type: 'multiple_choice', question: 'Выбери правильное: "I have ___ bread."', options: ['some', 'any', 'a', 'an'], correct: 0 }, { type: 'fill_blank', question: 'Do you have ___ milk?', correct: 'any', options: ['any', 'some', 'a', 'the'] }, { type: 'translation_ru', question: 'Переведи: "Vegetables are healthy."', correct: 'овощи полезны', accept: ['овощи полезны', 'овощи полезные'] }, { type: 'word_bank', question: 'Составь: "I have some cheese."', words: ['I', 'have', 'some', 'cheese'], correctSentence: 'i have some cheese' } ] },
-                { id: 'a2_5', title: 'Здоровье и болезни', emoji: '🩺', vocabulary: [ { en: 'headache', ru: 'головная боль', example: 'I have a headache.' }, { en: 'stomach', ru: 'живот', example: 'My stomach hurts.' }, { en: 'doctor', ru: 'врач', example: 'Go to the doctor.' }, { en: 'medicine', ru: 'лекарство', example: 'Take the medicine.' }, { en: 'rest', ru: 'отдых', example: 'You need rest.' } ], grammar: 'Модальный глагол should для советов: You should rest, You shouldn\'t work.', examples: [ 'You should see a doctor.', 'She should take medicine.', 'You shouldn\'t eat junk food.' ], funFact: 'Английская фраза "an apple a day keeps the doctor away" — яблоко в день, и врач не нужен.', tip: 'Should = совет. Отрицание: shouldn\'t.', tasks: [ { type: 'multiple_choice', question: 'Как дать совет: "Тебе следует отдохнуть"?', options: ['You should rest', 'You must rest', 'You can rest', 'You rest'], correct: 0 }, { type: 'fill_blank', question: 'She ___ take medicine.', correct: 'should', options: ['should', 'must', 'can', 'will'] }, { type: 'translation_ru', question: 'Переведи: "I have a headache."', correct: 'у меня болит голова', accept: ['у меня головная боль'] }, { type: 'word_bank', question: 'Составь: "You should see a doctor."', words: ['You', 'should', 'see', 'a', 'doctor'], correctSentence: 'you should see a doctor' } ] },
-                { id: 'a2_6', title: 'Хобби и свободное время', emoji: '🎨', vocabulary: [ { en: 'reading', ru: 'чтение', example: 'I like reading.' }, { en: 'swimming', ru: 'плавание', example: 'She goes swimming.' }, { en: 'drawing', ru: 'рисование', example: 'He likes drawing.' }, { en: 'playing', ru: 'игра', example: 'They enjoy playing football.' }, { en: 'cooking', ru: 'готовка', example: 'Cooking is fun.' } ], grammar: 'Герундий (глагол + -ing) после глаголов like, enjoy, go: I like reading, She enjoys swimming.', examples: [ 'I like reading books.', 'He enjoys playing chess.', 'We go swimming on Sundays.' ], funFact: 'В Британии очень популярны пазлы и садоводство как хобби.', tip: 'После like/enjoy/go используй -ing форму.', tasks: [ { type: 'multiple_choice', question: 'Как сказать "Мне нравится плавать"?', options: ['I like swimming', 'I like swim', 'I like to swimming', 'I am liking swimming'], correct: 0 }, { type: 'fill_blank', question: 'She enjoys ___ (read).', correct: 'reading', options: ['reading', 'read', 'to read', 'reads'] }, { type: 'translation_en', question: 'Переведи: "Он любит рисовать."', correct: 'he likes drawing', accept: ['he likes to draw', 'he likes drawing'] }, { type: 'word_bank', question: 'Составь: "I like cooking."', words: ['I', 'like', 'cooking'], correctSentence: 'i like cooking' } ] },
-                { id: 'a2_7', title: 'В ресторане', emoji: '🍽️', vocabulary: [ { en: 'menu', ru: 'меню', example: 'Can I see the menu?' }, { en: 'order', ru: 'заказывать', example: 'I would like to order.' }, { en: 'waiter', ru: 'официант', example: 'The waiter is friendly.' }, { en: 'bill', ru: 'счёт', example: 'Can I have the bill?' }, { en: 'delicious', ru: 'вкусный', example: 'The food is delicious.' } ], grammar: 'Конструкция would like для вежливой просьбы: I would like a coffee, I would like to order.', examples: [ 'I would like a pizza.', 'Would you like some water?', 'I would like to pay.' ], funFact: 'В США принято оставлять чаевые 15-20% от счёта.', tip: 'Would like = хочу (вежливо). Сокращённо: I\'d like.', tasks: [ { type: 'multiple_choice', question: 'Как сказать "Я бы хотел заказать"?', options: ['I would like to order', 'I like order', 'I want order', 'I order'], correct: 0 }, { type: 'fill_blank', question: '___ you like some tea?', correct: 'would', options: ['Would', 'Do', 'Are', 'Is'] }, { type: 'translation_ru', question: 'Переведи: "The food is delicious."', correct: 'еда вкусная', accept: ['еда вкусная', 'блюдо вкусное'] }, { type: 'word_bank', question: 'Составь: "I would like a pizza."', words: ['I', 'would', 'like', 'a', 'pizza'], correctSentence: 'i would like a pizza' } ] },
-                { id: 'a2_8', title: 'Прошедшее время', emoji: '🕰️', vocabulary: [ { en: 'yesterday', ru: 'вчера', example: 'I visited my friend yesterday.' }, { en: 'last week', ru: 'на прошлой неделе', example: 'We went to the cinema last week.' }, { en: 'ago', ru: 'назад', example: 'Two days ago.' }, { en: 'was', ru: 'был(а)', example: 'I was at home.' }, { en: 'were', ru: 'были', example: 'They were happy.' } ], grammar: 'Past Simple: правильные глаголы +ed, неправильные — вторая форма. Was/were для to be.', examples: [ 'I watched TV yesterday.', 'She went to school.', 'We were at the park.' ], funFact: 'В английском неправильных глаголов около 200, но самые частые нужно просто запомнить.', tip: 'Маркеры прошлого: yesterday, last week, ago.', tasks: [ { type: 'multiple_choice', question: 'Как сказать "Я был дома"?', options: ['I was at home', 'I were at home', 'I am at home', 'I be at home'], correct: 0 }, { type: 'fill_blank', question: 'They ___ happy yesterday.', correct: 'were', options: ['were', 'was', 'is', 'are'] }, { type: 'translation_ru', question: 'Переведи: "I watched TV yesterday."', correct: 'я смотрел телевизор вчера', accept: ['я смотрел телевизор вчера'] }, { type: 'word_bank', question: 'Составь: "She went to school."', words: ['She', 'went', 'to', 'school'], correctSentence: 'she went to school' } ] }
-            ],
-            B1: [
-                { id: 'b1_1', title: 'Путешествия и отпуск', emoji: '✈️', vocabulary: [ { en: 'destination', ru: 'место назначения', example: 'Our destination is Paris.' }, { en: 'luggage', ru: 'багаж', example: 'I packed my luggage.' }, { en: 'flight', ru: 'рейс', example: 'The flight was delayed.' }, { en: 'accommodation', ru: 'жильё', example: 'We found cheap accommodation.' }, { en: 'sightseeing', ru: 'осмотр достопримечательностей', example: 'We went sightseeing all day.' } ], grammar: 'Present Perfect: I have visited, She has been. Используем для опыта, без указания времени.', examples: [ 'I have visited Paris twice.', 'She has never been to Italy.', 'We have already booked the hotel.' ], funFact: 'Американцы обожают road trips — путешествия на машине. Знаменитый Route 66 длиной 4000 км!', tip: 'Present Perfect = have/has + третья форма глагола. «I have been to London» — я был в Лондоне.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Я побывал в Париже» (без указания времени)?', options: ['I have been to Paris', 'I was in Paris', 'I go to Paris', 'I am in Paris'], correct: 0 }, { type: 'fill_blank', question: 'She ___ already booked the hotel.', correct: 'has', options: ['has', 'have', 'is', 'did'] }, { type: 'translation_ru', question: 'Переведи: «We have visited Rome.»', correct: 'мы посетили рим', accept: ['мы побывали в риме'] }, { type: 'dialogue', question: 'Ответь: «Have you ever been to London?» (Да, я был)', correct: 'yes, i have', accept: ['yes i have', 'yes, i have been to london', 'yes i have been to london'] } ] },
-                { id: 'b1_2', title: 'Работа и карьера', emoji: '💼', vocabulary: [ { en: 'colleague', ru: 'коллега', example: 'My colleague is friendly.' }, { en: 'salary', ru: 'зарплата', example: 'The salary is good.' }, { en: 'meeting', ru: 'встреча, совещание', example: 'I have a meeting at 10.' }, { en: 'deadline', ru: 'срок сдачи', example: 'The deadline is tomorrow.' }, { en: 'promotion', ru: 'повышение', example: 'She got a promotion.' } ], grammar: 'Future Simple: will + глагол. Используем для спонтанных решений и предсказаний.', examples: [ 'I will call you tomorrow.', 'She will get a promotion.', 'We will finish the project on time.' ], funFact: 'В США отпуск обычно всего 2 недели в году, в то время как в Европе — 4-6 недель!', tip: 'Will + глагол — универсальное будущее. Запомни: «I will do it» — я сделаю это.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Я позвоню тебе завтра»?', options: ['I will call you tomorrow', 'I call you tomorrow', 'I am call you tomorrow', 'I will to call you tomorrow'], correct: 0 }, { type: 'fill_blank', question: 'She ___ get a promotion soon.', correct: 'will', options: ['will', 'is', 'has', 'do'] }, { type: 'translation_en', question: 'Переведи: «У меня совещание завтра.»', correct: 'i have a meeting tomorrow', accept: ['i will have a meeting tomorrow'] } ] },
-                { id: 'b1_3', title: 'Здоровье и спорт', emoji: '💪', vocabulary: [ { en: 'exercise', ru: 'упражнение', example: 'Regular exercise is important.' }, { en: 'healthy', ru: 'здоровый', example: 'A healthy diet.' }, { en: 'injury', ru: 'травма', example: 'He has a knee injury.' }, { en: 'recovery', ru: 'восстановление', example: 'The recovery takes time.' }, { en: 'wellness', ru: 'благополучие', example: 'Wellness is a lifestyle.' } ], grammar: 'Модальные глаголы: should (следует), must (должен), can (может).', examples: [ 'You should exercise more.', 'I must see a doctor.', 'She can run fast.' ], funFact: 'В США очень популярны «gym culture» и протеиновые коктейли. Некоторые ходят в зал дважды в день!', tip: 'Should = совет. Must = обязанность. Can = возможность. Не путай!', tasks: [ { type: 'multiple_choice', question: 'Как дать совет: «Тебе следует больше тренироваться»?', options: ['You should exercise more', 'You must exercise more', 'You can exercise more', 'You exercise more'], correct: 0 }, { type: 'fill_blank', question: 'I ___ see a doctor. I feel sick.', correct: 'must', options: ['must', 'should', 'can', 'will'] }, { type: 'translation_ru', question: 'Переведи: «She can run fast.»', correct: 'она может быстро бегать', accept: ['она может бегать быстро'] }, { type: 'word_bank', question: 'Составь: «You should sleep more.»', words: ['should', 'more', 'You', 'sleep'], correctSentence: 'you should sleep more' } ] },
-                { id: 'b1_4', title: 'Образование и университет', emoji: '🎓', vocabulary: [ { en: 'degree', ru: 'степень', example: 'She has a degree in law.' }, { en: 'lecture', ru: 'лекция', example: 'The lecture is interesting.' }, { en: 'seminar', ru: 'семинар', example: 'We have a seminar today.' }, { en: 'research', ru: 'исследование', example: 'He is doing research.' }, { en: 'knowledge', ru: 'знания', example: 'Knowledge is power.' } ], grammar: 'Present Perfect Continuous: have been + глагол-ing для действий, начавшихся в прошлом и продолжающихся.', examples: [ 'I have been studying English for 5 years.', 'She has been working on her thesis.', 'They have been living here since 2020.' ], funFact: 'В Гарварде самая большая библиотека в мире — более 20 миллионов книг!', tip: 'Present Perfect Continuous = have/has + been + V-ing. Используй с for/since.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Я учу английский 5 лет»?', options: ['I have been learning English for 5 years', 'I learn English for 5 years', 'I am learning English for 5 years', 'I have learn English for 5 years'], correct: 0 }, { type: 'fill_blank', question: 'She ___ been working on her thesis.', correct: 'has', options: ['has', 'have', 'is', 'was'] }, { type: 'translation_ru', question: 'Переведи: «Knowledge is power.»', correct: 'знание - сила', accept: ['знание сила', 'знания - сила'] }, { type: 'word_bank', question: 'Составь: «I have been studying English.»', words: ['I', 'have', 'been', 'studying', 'English'], correctSentence: 'i have been studying english' } ] },
-                { id: 'b1_5', title: 'Интернет и социальные сети', emoji: '💻', vocabulary: [ { en: 'social media', ru: 'социальные сети', example: 'Social media is popular.' }, { en: 'privacy', ru: 'конфиденциальность', example: 'Privacy is important.' }, { en: 'data', ru: 'данные', example: 'Your data is protected.' }, { en: 'influence', ru: 'влияние', example: 'Influencers have a lot of influence.' }, { en: 'trend', ru: 'тренд', example: 'This is a new trend.' } ], grammar: 'Passive Voice: is/are + V3. Используем, когда важнее действие, а не кто его совершил.', examples: [ 'Personal data is collected by apps.', 'Many posts are shared every minute.', 'The internet was invented in the 20th century.' ], funFact: 'Каждую минуту на YouTube загружается более 500 часов видео!', tip: 'Passive = be + V3. "The app was created" — приложение было создано.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Данные защищены»?', options: ['Data is protected', 'Data are protected', 'Data protected', 'Data is protect'], correct: 0 }, { type: 'fill_blank', question: 'Many posts ___ shared every minute.', correct: 'are', options: ['are', 'is', 'was', 'be'] }, { type: 'translation_ru', question: 'Переведи: «The internet was invented in the 20th century.»', correct: 'интернет был изобретен в 20 веке', accept: ['интернет был изобретён в 20 веке'] }, { type: 'word_bank', question: 'Составь: «Personal data is collected.»', words: ['Personal', 'data', 'is', 'collected'], correctSentence: 'personal data is collected' } ] },
-                { id: 'b1_6', title: 'Кино и сериалы', emoji: '🎬', vocabulary: [ { en: 'plot', ru: 'сюжет', example: 'The plot is exciting.' }, { en: 'character', ru: 'персонаж', example: 'The main character is brave.' }, { en: 'episode', ru: 'эпизод', example: 'I watched two episodes.' }, { en: 'review', ru: 'отзыв', example: 'The review was positive.' }, { en: 'genre', ru: 'жанр', example: 'My favorite genre is comedy.' } ], grammar: 'Сравнение Past Simple и Present Perfect: Past Simple для завершённых действий с указанием времени, Present Perfect для опыта без времени.', examples: [ 'I watched this movie yesterday.', 'I have seen this movie.', 'She has watched ten episodes today.' ], funFact: 'Самый длинный сериал — «Доктор Кто», он идёт с 1963 года!', tip: 'Если есть указание времени (yesterday, last week) — Past Simple. Если опыта без времени — Present Perfect.', tasks: [ { type: 'multiple_choice', question: 'Выбери правильное предложение:', options: ['I have seen this movie', 'I saw this movie yesterday', 'I have saw this movie', 'I seen this movie'], correct: 0 }, { type: 'fill_blank', question: 'She ___ watched ten episodes today.', correct: 'has', options: ['has', 'have', 'is', 'was'] }, { type: 'translation_ru', question: 'Переведи: «The plot is exciting.»', correct: 'сюжет захватывающий', accept: ['сюжет интересный'] } ] },
-                { id: 'b1_7', title: 'Экология и переработка', emoji: '♻️', vocabulary: [ { en: 'recycle', ru: 'перерабатывать', example: 'We should recycle more.' }, { en: 'pollution', ru: 'загрязнение', example: 'Pollution is a big problem.' }, { en: 'environment', ru: 'окружающая среда', example: 'Protect the environment.' }, { en: 'waste', ru: 'отходы', example: 'Reduce waste.' }, { en: 'energy', ru: 'энергия', example: 'Save energy.' } ], grammar: 'Second Conditional: If + Past Simple, would + V. Используем для нереальных или маловероятных условий в настоящем/будущем.', examples: [ 'If people recycled more, the planet would be cleaner.', 'If I had a garden, I would plant trees.', 'If we used less plastic, oceans would be healthier.' ], funFact: 'Швеция настолько хорошо перерабатывает мусор, что импортирует его из других стран!', tip: 'Second Conditional = If + Past Simple, would + V. Говорим о мечтах или нереальных условиях.', tasks: [ { type: 'multiple_choice', question: 'Выбери правильное условное предложение второго типа:', options: ['If people recycled more, the planet would be cleaner', 'If people recycle more, the planet will be cleaner', 'If people recycled more, the planet will be cleaner', 'If people would recycle more, the planet would be cleaner'], correct: 0 }, { type: 'fill_blank', question: 'If I had a garden, I ___ plant trees.', correct: 'would', options: ['would', 'will', 'am', 'do'] }, { type: 'translation_ru', question: 'Переведи: «We should recycle more.»', correct: 'мы должны больше перерабатывать', accept: ['нам следует больше перерабатывать'] } ] },
-                { id: 'b1_8', title: 'Собеседование и работа', emoji: '🤝', vocabulary: [ { en: 'resume', ru: 'резюме', example: 'Send your resume.' }, { en: 'interview', ru: 'собеседование', example: 'The interview went well.' }, { en: 'experience', ru: 'опыт', example: 'I have experience in sales.' }, { en: 'skill', ru: 'навык', example: 'Communication is an important skill.' }, { en: 'salary expectations', ru: 'зарплатные ожидания', example: 'What are your salary expectations?' } ], grammar: 'Фразовые глаголы: apply for (подавать заявку), give up (сдаваться), carry out (выполнять).', examples: [ 'I applied for the job.', 'Never give up!', 'We carried out the plan.' ], funFact: 'В Google на собеседованиях задают головоломки, чтобы проверить мышление.', tip: 'Фразовые глаголы = глагол + предлог. Значение меняется!', tasks: [ { type: 'multiple_choice', question: 'Как перевести "подавать заявку"?', options: ['Apply for', 'Give up', 'Carry out', 'Look for'], correct: 0 }, { type: 'fill_blank', question: 'I ___ for the job yesterday.', correct: 'applied', options: ['applied', 'apply', 'applies', 'applying'] }, { type: 'translation_ru', question: 'Переведи: "Never give up!"', correct: 'никогда не сдавайся', accept: ['не сдавайся'] } ] }
-            ],
-            B2: [
-                { id: 'b2_1', title: 'Технологии и искусственный интеллект', emoji: '🤖', vocabulary: [ { en: 'artificial intelligence', ru: 'искусственный интеллект', example: 'AI is changing the world.' }, { en: 'innovation', ru: 'инновация', example: 'This is a great innovation.' }, { en: 'privacy', ru: 'конфиденциальность', example: 'Privacy is a big concern.' }, { en: 'data', ru: 'данные', example: 'Your data is protected.' }, { en: 'algorithm', ru: 'алгоритм', example: 'The algorithm is complex.' } ], grammar: 'Passive Voice: is made, was created, has been developed. Используем, когда важнее действие, а не кто его совершил.', examples: [ 'The software was developed in 2020.', 'Personal data is collected by many apps.', 'New technologies are being invented every day.' ], funFact: 'Слово «robot» пришло из чешского языка и означает «принудительный труд». Его придумал писатель Карел Чапек в 1920 году!', tip: 'Passive = to be + третья форма глагола. «The app was created» — приложение было создано.', tasks: [ { type: 'multiple_choice', question: 'Как сказать «Программа была разработана в 2020»?', options: ['The software was developed in 2020', 'The software developed in 2020', 'The software is developed in 2020', 'The software has develop in 2020'], correct: 0 }, { type: 'fill_blank', question: 'Personal data ___ collected by apps.', correct: 'is', options: ['is', 'are', 'was', 'were'] }, { type: 'translation_ru', question: 'Переведи: «New technologies are being invented.»', correct: 'новые технологии изобретаются', accept: ['новые технологии изобретаются'] }, { type: 'dialogue', question: 'Тебя спрашивают: «Do you think AI is dangerous?» Ответь: «Я думаю, это зависит от того, как мы его используем.»', correct: 'i think it depends on how we use it', accept: ['i think it depends on how we use it', 'it depends on how we use it'] } ] },
-                { id: 'b2_2', title: 'Окружающая среда и экология', emoji: '🌍', vocabulary: [ { en: 'sustainability', ru: 'устойчивое развитие', example: 'Sustainability is crucial.' }, { en: 'pollution', ru: 'загрязнение', example: 'Air pollution is a problem.' }, { en: 'renewable', ru: 'возобновляемый', example: 'Renewable energy sources.' }, { en: 'carbon footprint', ru: 'углеродный след', example: 'We should reduce our carbon footprint.' }, { en: 'conservation', ru: 'сохранение', example: 'Wildlife conservation is important.' } ], grammar: 'Conditionals: Zero, First, Second. If + present, will + verb (First Conditional для реальных условий).', examples: [ 'If we don\'t act now, the planet will suffer.', 'If you recycle, you help the environment.', 'If people used less plastic, oceans would be cleaner.' ], funFact: 'Швеция настолько хорошо перерабатывает мусор, что импортирует его из других стран!', tip: 'First Conditional: If + Present Simple, will + глагол. «If it rains, I will stay home.»', tasks: [ { type: 'multiple_choice', question: 'Выбери правильное условное предложение:', options: ['If we recycle, we will help the planet', 'If we will recycle, we help the planet', 'If we recycled, we will help the planet', 'If we recycle, we help planet'], correct: 0 }, { type: 'fill_blank', question: 'If people ___ less plastic, oceans would be cleaner.', correct: 'used', options: ['used', 'use', 'will use', 'using'] }, { type: 'translation_ru', question: 'Переведи: «Если мы не будем действовать, планета пострадает.»', correct: 'if we dont act, the planet will suffer', accept: ['if we do not act, the planet will suffer', 'if we dont act the planet will suffer'] } ] },
-                { id: 'b2_3', title: 'Культура и искусство', emoji: '🎨', vocabulary: [ { en: 'masterpiece', ru: 'шедевр', example: 'This painting is a masterpiece.' }, { en: 'exhibition', ru: 'выставка', example: 'The exhibition was amazing.' }, { en: 'critic', ru: 'критик', example: 'The critic wrote a review.' }, { en: 'aesthetic', ru: 'эстетический', example: 'Aesthetic value.' }, { en: 'portrayal', ru: 'изображение', example: 'The portrayal of emotions.' } ], grammar: 'Reported Speech: He said that..., She told me that... Согласование времён.', examples: [ 'She said that she loved the exhibition.', 'The critic told me that the movie was boring.', 'He said he would visit the gallery.' ], funFact: 'Самая дорогая картина в мире — «Спаситель мира» Леонардо да Винчи — была продана за 450 миллионов долларов!', tip: 'В косвенной речи время «сдвигается» назад: present → past, will → would.', tasks: [ { type: 'multiple_choice', question: 'Переведи в косвенную речь: «She said, \'I love art.\'»', options: ['She said that she loved art', 'She said that she loves art', 'She said that she will love art', 'She said that she is loving art'], correct: 0 }, { type: 'fill_blank', question: 'He told me that he ___ visit the gallery.', correct: 'would', options: ['would', 'will', 'is', 'has'] }, { type: 'translation_ru', question: 'Переведи: «Критик сказал, что фильм был скучным.»', correct: 'the critic said that the movie was boring', accept: ['the critic said the movie was boring'] } ] },
-                { id: 'b2_4', title: 'Политика и общество', emoji: '🏛️', vocabulary: [ { en: 'government', ru: 'правительство', example: 'The government passed a new law.' }, { en: 'policy', ru: 'политика', example: 'The policy is controversial.' }, { en: 'election', ru: 'выборы', example: 'The election was fair.' }, { en: 'citizen', ru: 'гражданин', example: 'Every citizen has rights.' }, { en: 'democracy', ru: 'демократия', example: 'Democracy is important.' } ], grammar: 'Инверсия в условных предложениях: Should you need help, Had I known, Were I you.', examples: [ 'Should you need help, call me.', 'Had I known, I would have acted.', 'Were I you, I would apologize.' ], funFact: 'В Швейцарии граждане могут предлагать изменения в конституцию через референдумы.', tip: 'Инверсия — это формальный стиль. Начинается с Should, Had, Were без if.', tasks: [ { type: 'multiple_choice', question: 'Какое предложение с инверсией правильное?', options: ['Should you need help, call me', 'If you need help, call me', 'You should need help, call me', 'Need help, should you call me'], correct: 0 }, { type: 'fill_blank', question: '___ I known, I would have acted.', correct: 'had', options: ['Had', 'Have', 'If', 'Should'] }, { type: 'translation_ru', question: 'Переведи: «Every citizen has rights.»', correct: 'каждый гражданин имеет права', accept: ['у каждого гражданина есть права'] } ] },
-                { id: 'b2_5', title: 'Наука и открытия', emoji: '🔬', vocabulary: [ { en: 'breakthrough', ru: 'прорыв', example: 'This is a scientific breakthrough.' }, { en: 'research', ru: 'исследование', example: 'The research is ongoing.' }, { en: 'experiment', ru: 'эксперимент', example: 'The experiment failed.' }, { en: 'theory', ru: 'теория', example: 'The theory was proven.' }, { en: 'discovery', ru: 'открытие', example: 'The discovery changed science.' } ], grammar: 'Reported Speech (продвинутый уровень): согласование времён, модальные глаголы в косвенной речи.', examples: [ 'The scientist said that the experiment had failed.', 'She told me that she would publish the results.', 'They announced that a breakthrough had been made.' ], funFact: 'Пенициллин открыли случайно, когда плесень попала в чашку Петри.', tip: 'В косвенной речи Past Simple → Past Perfect, will → would, can → could.', tasks: [ { type: 'multiple_choice', question: 'Переведи в косвенную речь: «The scientist said, "The experiment failed."»', options: ['The scientist said that the experiment had failed', 'The scientist said that the experiment failed', 'The scientist said that the experiment fails', 'The scientist said that the experiment has failed'], correct: 0 }, { type: 'fill_blank', question: 'She told me that she ___ publish the results.', correct: 'would', options: ['would', 'will', 'can', 'has'] }, { type: 'translation_ru', question: 'Переведи: «The discovery changed science.»', correct: 'открытие изменило науку', accept: ['открытие изменило науку'] } ] },
-                { id: 'b2_6', title: 'Психология и эмоции', emoji: '🧠', vocabulary: [ { en: 'emotion', ru: 'эмоция', example: 'Emotions influence decisions.' }, { en: 'anxiety', ru: 'тревога', example: 'She suffers from anxiety.' }, { en: 'motivation', ru: 'мотивация', example: 'Motivation is key.' }, { en: 'behavior', ru: 'поведение', example: 'Human behavior is complex.' }, { en: 'resilience', ru: 'устойчивость', example: 'Resilience helps overcome stress.' } ], grammar: 'Mixed Conditionals: If + Past Perfect, would + V (смешение времён).', examples: [ 'If I had studied harder, I would be more confident now.', 'If she had taken the job, she would be rich now.', 'If he were more resilient, he would have recovered faster.' ], funFact: 'Мозг потребляет около 20% всей энергии тела, хотя составляет только 2% массы.', tip: 'Mixed Conditionals сочетают условие в прошлом и результат в настоящем.', tasks: [ { type: 'multiple_choice', question: 'Выбери смешанное условное:', options: ['If I had studied harder, I would be more confident now', 'If I studied harder, I would be more confident now', 'If I had studied harder, I would have been more confident now', 'If I would study harder, I would be more confident now'], correct: 0 }, { type: 'fill_blank', question: 'If she had taken the job, she ___ rich now.', correct: 'would be', options: ['would be', 'would have been', 'will be', 'is'] }, { type: 'translation_ru', question: 'Переведи: «Resilience helps overcome stress.»', correct: 'устойчивость помогает преодолеть стресс', accept: ['устойчивость помогает преодолевать стресс'] } ] },
-                { id: 'b2_7', title: 'Бизнес и стартапы', emoji: '📈', vocabulary: [ { en: 'entrepreneur', ru: 'предприниматель', example: 'The entrepreneur launched a startup.' }, { en: 'revenue', ru: 'выручка', example: 'Revenue increased by 20%.' }, { en: 'investment', ru: 'инвестиции', example: 'The company needs investment.' }, { en: 'market', ru: 'рынок', example: 'The market is competitive.' }, { en: 'strategy', ru: 'стратегия', example: 'We need a new strategy.' } ], grammar: 'Модальные глаголы вероятности: must, might, could, can\'t для выражения уверенности.', examples: [ 'The project must be successful.', 'It might rain tomorrow.', 'She can\'t be the CEO; she\'s too young.' ], funFact: 'Apple начиналась в гараже Стива Джобса, а сейчас это самая дорогая компания мира.', tip: 'Must = уверенность (90%), might/could = возможность, can\'t = невозможно.', tasks: [ { type: 'multiple_choice', question: 'Как выразить уверенность: «Он, должно быть, директор»?', options: ['He must be the director', 'He might be the director', 'He could be the director', 'He can\'t be the director'], correct: 0 }, { type: 'fill_blank', question: 'It ___ rain tomorrow (возможно).', correct: 'might', options: ['might', 'must', 'can\'t', 'will'] }, { type: 'translation_ru', question: 'Переведи: «The market is competitive.»', correct: 'рынок конкурентоспособный', accept: ['рынок конкурентный'] } ] },
-                { id: 'b2_8', title: 'Искусство и музеи', emoji: '🖼️', vocabulary: [ { en: 'masterpiece', ru: 'шедевр', example: 'The painting is a masterpiece.' }, { en: 'exhibition', ru: 'выставка', example: 'The exhibition opens tomorrow.' }, { en: 'curator', ru: 'куратор', example: 'The curator guided us.' }, { en: 'restoration', ru: 'реставрация', example: 'The restoration took years.' }, { en: 'canvas', ru: 'холст', example: 'The canvas is huge.' } ], grammar: 'Cleft sentences: What + clause + be + ... для выделения информации.', examples: [ 'What I love about art is the emotion.', 'It was the exhibition that impressed me.', 'What the curator said was inspiring.' ], funFact: 'Лувр — самый посещаемый музей мира. В 2023 году его посетили 8,9 млн человек.', tip: 'Cleft sentences делают речь выразительнее. Начинается с What или It is/was.', tasks: [ { type: 'multiple_choice', question: 'Какое предложение является cleft?', options: ['What I love is the emotion', 'I love the emotion', 'The emotion is loved', 'It is love the emotion'], correct: 0 }, { type: 'fill_blank', question: 'It ___ the exhibition that impressed me.', correct: 'was', options: ['was', 'is', 'were', 'be'] }, { type: 'translation_ru', question: 'Переведи: «The restoration took years.»', correct: 'реставрация заняла годы', accept: ['реставрация заняла много лет'] } ] }
-            ]
-        };
+    <div class="field">
+      <label>Выбери аватарку</label>
+      <div id="avatars" class="avatars"></div>
+    </div>
 
-        // ========== СОСТОЯНИЕ ПРИЛОЖЕНИЯ ==========
-        let currentUser = null;
-        let currentScreen = 'login';
-        let currentLevel = null;
-        let currentLesson = null;
-        let currentTaskIndex = 0;
-        let score = 0;
-        let testAnswers = [];
-        let isTestMode = false;
-        let testQuestions = [];
-        let testLessonIds = [];
+    <button class="btn" style="width:100%;margin-top:12px" onclick="register()">Войти в клуб</button>
+    <div class="auth-note">Данные сохраняются локально в браузере через localStorage.</div>
+  </div>
+</div>
 
-        // ========== УТИЛИТЫ ==========
-        function safeLocalStorageGet(key) { try { return localStorage.getItem(key); } catch (e) { return null; } }
-        function safeLocalStorageSet(key, value) { try { localStorage.setItem(key, value); return true; } catch (e) { console.warn('localStorage недоступен:', e); return false; } }
-        function saveData() { safeLocalStorageSet('puhlya_users', JSON.stringify(users)); }
-        function loadData() { const data = safeLocalStorageGet('puhlya_users'); if (data) { try { users = JSON.parse(data); } catch (e) { console.warn('Не удалось прочитать данные:', e); users = []; } } }
-        function generateId() { return Date.now().toString(36) + Math.random().toString(36).substr(2); }
-        function shuffleArray(arr) { const a = [...arr]; for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-        function getRandomPhrase(phrases) { return phrases[Math.floor(Math.random() * phrases.length)]; }
-        function showScreen(screenId, param) { currentScreen = screenId; if (param && screenId === 'level') currentLevel = param; render(); }
-        function showModal(content) { document.getElementById('modalContent').innerHTML = content; document.getElementById('modal').classList.remove('hidden'); }
-        function closeModal() { document.getElementById('modal').classList.add('hidden'); }
-        function confetti() { for (let i = 0; i < 20; i++) { const el = document.createElement('div'); el.className = 'confetti'; el.textContent = ['🎉', '🎊', '✨', '💖', '🌟'][Math.floor(Math.random() * 5)]; el.style.left = Math.random() * 100 + 'vw'; el.style.animationDuration = Math.random() * 2 + 2 + 's'; el.style.fontSize = Math.random() * 1.5 + 1 + 'em'; document.body.appendChild(el); setTimeout(() => el.remove(), 3000); } }
+<div id="app" class="app hidden">
 
-        // ========== ПОЛЬЗОВАТЕЛИ ==========
-        let users = [];
-        function register(nick, password, name, age, avatar) { const user = { id: generateId(), nick, password, name, age, avatar, progress: { A1: { completedLessons: [], medals: [], testScores: [], errors: [], achievements: [], vocabulary: [] }, A2: { completedLessons: [], medals: [], testScores: [], errors: [], achievements: [], vocabulary: [] }, B1: { completedLessons: [], medals: [], testScores: [], errors: [], achievements: [], vocabulary: [] }, B2: { completedLessons: [], medals: [], testScores: [], errors: [], achievements: [], vocabulary: [] } }, createdAt: new Date().toISOString() }; users.push(user); saveData(); currentUser = user; return user; }
-        function login(nick, password) { return users.find(u => u.nick === nick && u.password === password) || null; }
-        function getUserById(id) { return users.find(u => u.id === id) || null; }
-        function updateUser(user) { const index = users.findIndex(u => u.id === user.id); if (index !== -1) { users[index] = user; saveData(); currentUser = user; } }
+<aside class="sidebar" id="sidebar">
+  <div class="logo">Businka <span>English</span></div>
 
-        // ========== ЛОГИКА ПРОГРЕССА ==========
-        function getLevelProgress(level) { if (!currentUser) return 0; const totalLessons = lessonsData[level].length; const completed = currentUser.progress[level].completedLessons.length; return totalLessons > 0 ? Math.round((completed / totalLessons) * 100) : 0; }
-        function addVocabularyToUser(level, lesson) { lesson.vocabulary.forEach(v => { if (!currentUser.progress[level].vocabulary.find(w => w.en === v.en)) currentUser.progress[level].vocabulary.push(v); }); }
-        function completeLesson(level, lessonId) { if (!currentUser.progress[level].completedLessons.includes(lessonId)) { currentUser.progress[level].completedLessons.push(lessonId); const lesson = lessonsData[level].find(l => l.id === lessonId); if (lesson) { currentUser.progress[level].medals.push({ lessonId, title: lesson.title, emoji: lesson.emoji, date: new Date().toISOString() }); currentUser.progress[level].achievements.push({ type: 'lesson', text: `Пройден урок «${lesson.title}»`, date: new Date().toISOString() }); addVocabularyToUser(level, lesson); } updateUser(currentUser); } }
-        function addError(level, question, correctAnswer, userAnswer, lessonId) { currentUser.progress[level].errors.push({ question, correctAnswer, userAnswer, lessonId, date: new Date().toISOString() }); updateUser(currentUser); }
-        function addTestScore(level, score, maxScore, lessonIds) { const grade = getGrade(score, maxScore); currentUser.progress[level].testScores.push({ score, maxScore, grade, lessonIds, date: new Date().toISOString() }); currentUser.progress[level].achievements.push({ type: 'test', text: `Контрольная работа: оценка ${grade}`, date: new Date().toISOString() }); updateUser(currentUser); }
-        function getGrade(score, maxScore) { const percent = score / maxScore; if (percent >= 0.9) return 5; if (percent >= 0.75) return 4; if (percent >= 0.6) return 3; return 2; }
-        function getTotalMedals() { if (!currentUser) return 0; return Object.values(currentUser.progress).reduce((acc, p) => acc + p.medals.length, 0); }
+  <div class="nav">
+    <div class="nav-title">Navigation</div>
+    <button onclick="showHome()">🏠 Главная</button>
+    <button onclick="showPlacement()">🧠 Тест уровня</button>
+    <button onclick="showProfile()">👤 Профиль</button>
+    <button onclick="showDictionary()">📖 Словарик</button>
 
-        // ========== ГЕНЕРАЦИЯ ЗАДАНИЙ ДЛЯ КОНТРОЛЬНОЙ ==========
-        function generateTest(level, lessonIds) { let allTasks = []; lessonIds.forEach(lid => { const lesson = lessonsData[level].find(l => l.id === lid); if (lesson) { lesson.tasks.forEach(t => { allTasks.push({ ...t, lessonId: lid, lessonTitle: lesson.title }); }); } }); allTasks = shuffleArray(allTasks); return allTasks.slice(0, Math.min(10, allTasks.length)); }
-        function getLessonIdsForBlock(level, blockIndex) { const lessons = lessonsData[level]; const start = blockIndex * 3; return lessons.slice(start, start + 3).map(l => l.id); }
+    <div class="nav-title">Levels</div>
+    <button class="level-btn" onclick="showLevel('A1')">A1 Beginner <span class="level-dot"></span></button>
+    <button class="level-btn" onclick="showLevel('A2')">A2 Elementary <span class="level-dot"></span></button>
+    <button class="level-btn" onclick="showLevel('B1')">B1 Intermediate <span class="level-dot"></span></button>
+    <button class="level-btn" onclick="showLevel('B2')">B2 Upper-Intermediate <span class="level-dot"></span></button>
 
-        // ========== ВСПОМОГАТЕЛЬНАЯ ФУНКЦИЯ ДЛЯ ПРОВЕРКИ ОТВЕТОВ ==========
-        function isCorrectAnswer(task, userValue) {
-            if (typeof task.correct === 'number') {
-                return userValue === task.correct;
-            } else {
-                return userValue.toLowerCase() === task.correct.toLowerCase();
-            }
+    <div class="nav-title">Account</div>
+    <button onclick="logout()">↪ Выйти</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <button class="mobile-menu" onclick="toggleSidebar()">☰</button>
+    <div></div>
+    <div class="user-mini">
+      <div id="miniAvatar" class="avatar-small">🐇</div>
+      <span id="miniName">Student</span>
+    </div>
+  </div>
+
+  <div id="content" class="content"></div>
+</main>
+
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script>
+
+/* =========================================================
+   USER DATA
+========================================================= */
+
+const AVATARS = ["🐰","🦊","🐻","🐼","🐯","🐨","🐸"];
+
+let selectedAvatar = "🐰";
+
+let user = JSON.parse(localStorage.getItem("businkaUser") || "null");
+
+function saveUser(){
+  localStorage.setItem("businkaUser",JSON.stringify(user));
+}
+
+function defaultUser(){
+  return {
+    nickname:"",
+    password:"",
+    age:"",
+    avatar:selectedAvatar,
+    level:"A1",
+    lessons:{},
+    tests:{},
+    dictionary:[],
+    achievements:[],
+    placementDone:false
+  };
+}
+
+/* =========================================================
+   BUSINKA PHRASES
+========================================================= */
+
+const goodPhrases = [
+"Вот это уже достойно. Даже я впечатлена. ✦",
+"Correct. Ты сегодня явно решила не позориться. 💎",
+"Да. Именно так. Keep going.",
+"Красиво. Мозг наконец-то сотрудничает.",
+"Perfect. Я записываю этот момент в историю.",
+"Вот теперь это было умно.",
+"Correct answer. Slay responsibly.",
+"Неплохо. Очень даже неплохо.",
+"Ты попала точно в цель.",
+"English brain activated.",
+"Вот за это я тебя уважаю.",
+"Правильно. Можно жить дальше.",
+"Ты действительно поняла правило. Шок.",
+"Clean answer. Мне нравится.",
+"Это было слишком легко для тебя.",
+"Correct. No notes.",
+"Ты сегодня dangerous.",
+"Именно так это и работает.",
+"Хорошая работа. Keep the momentum.",
+"Вот теперь звучишь как человек, который знает английский.",
+"Да, именно этот вариант.",
+"Мозг: online. Английский: online.",
+"Correct. We love competence.",
+"Очень достойно.",
+"Ты не просто угадала. Ты поняла.",
+"Это было elegant.",
+"Nice one.",
+"Правильно. Я даже не буду придираться.",
+"Вот это уже progress.",
+"Ты начинаешь видеть логику языка.",
+"Correct. Keep cooking.",
+"Это был хороший выбор.",
+"Ты поймала конструкцию.",
+"Наконец-то грамматика работает на нас.",
+"Сильный ответ.",
+"English is Englishing.",
+"Мне нравится твой сегодняшний performance.",
+"Точно. Без лишней драмы.",
+"Ты справилась. Obviously.",
+"Slay detected."
+];
+
+const badPhrases = [
+"Нет. Мы сейчас обе сделаем вид, что этого не было.",
+"Girl... правило буквально стояло перед тобой.",
+"Нет, darling. Английский так не договаривался.",
+"Это было смело. Неправильно, но смело.",
+"Я посмотрела на ответ. Потом ещё раз. Нет.",
+"Grammar has left the chat.",
+"Нет. Вернись к теории, пока мы не поссорились.",
+"Это не тот вариант. Даже мои уши расстроились.",
+"Girl, ты сейчас изобрела новую грамматику.",
+"Нет. Такой конструкции английский не выдавал.",
+"Почти, но именно здесь язык решил быть вредным.",
+"Это было dangerously wrong.",
+"Я требую пересмотра стратегии.",
+"Нет. Сначала правило, потом confidence.",
+"Ты сейчас споришь с английским. Английский победил.",
+"Не-а. Слишком красиво, чтобы быть правильно.",
+"Это был plot twist, но неправильный.",
+"Нет. У предложения другие планы.",
+"English said: absolutely not.",
+"Вернись на два шага назад.",
+"Это не ошибка характера. Это просто ошибка.",
+"Grammar police has entered the chat.",
+"Нет. Здесь нужна другая форма.",
+"Я вижу, что ты старалась. Но ответ всё равно нет.",
+"Almost. Но almost не считается.",
+"Нет, и я немного драматично вздохнула.",
+"Это звучало убедительно. Только не по-английски.",
+"Girl, check the verb.",
+"Здесь язык требует аккуратности.",
+"Не сдаёмся. Просто разбираем ещё раз.",
+"Нет. Подсказка уже практически кричит.",
+"Такой вариант сегодня не проходит кастинг.",
+"Wrong turn. Поворачиваем обратно.",
+"Не тот смысл. Смотри на контекст.",
+"Ты выбрала chaos. Нам нужен grammar.",
+"Нет. Сегодня я капризная, и английский тоже.",
+"Это был не лучший ход.",
+"Rule says no.",
+"Сейчас спокойно перечитаем предложение.",
+"Нет. Но следующая попытка может быть slay."
+];
+
+/* =========================================================
+   CONTENT DATA
+========================================================= */
+
+const LEVELS = {
+
+A1:{
+name:"Beginner",
+lessons:[
+["Hello & Introduction","Приветствия, знакомство и базовые данные"],
+["Daily Routine","Распорядок дня и Present Simple"],
+["Family & People","Семья, люди и possessive adjectives"],
+["Food & Drinks","Еда, напитки и countable/uncountable nouns"],
+["Around Town","Места в городе и there is/are"],
+["Home & Rooms","Дом, комнаты и prepositions"],
+["Free Time","Хобби и can/can't"],
+["Clothes & Appearance","Одежда и Present Continuous"],
+["Weather","Погода и базовые описания"],
+["Shopping","Покупки, цены и some/any"],
+["Past Weekend","Past Simple и прошлые события"],
+["Travel Basics","Путешествия и вопросы"],
+["Plans","be going to"],
+["Health & Feelings","Самочувствие и should"],
+["A1 Final Review","Повторение всего уровня"]
+]
+},
+
+A2:{
+name:"Elementary",
+lessons:[
+["Life Stories","Past Simple vs Past Continuous"],
+["Future Plans","will / going to / Present Continuous"],
+["Experiences","Present Perfect"],
+["Comparisons","Comparative and superlative forms"],
+["Work & Study","Modal verbs"],
+["Technology","Present Perfect vs Past Simple"],
+["Relationships","Gerunds and infinitives"],
+["Travel Problems","First Conditional"],
+["Environment","Quantifiers"],
+["News & Media","Passive voice basics"],
+["Money","Second Conditional basics"],
+["Culture","Relative clauses"],
+["Learning","Reported speech basics"],
+["Opinions","Linking words"],
+["A2 Final Review","Повторение уровня"]
+]
+},
+
+B1:{
+name:"Intermediate",
+lessons:[
+["Narratives","Past perfect and narrative tenses"],
+["Habits & Change","used to / would"],
+["Future Possibilities","Future forms and probability"],
+["Workplace English","Formal and informal language"],
+["Relationships","Complex adjective clauses"],
+["Media Literacy","Passive structures"],
+["Environment","Conditionals"],
+["Decision Making","Modal verbs of deduction"],
+["Education","Gerunds, infinitives and patterns"],
+["Travel & Culture","Reported speech"],
+["Technology","Causative structures"],
+["Society","Advanced quantifiers"],
+["Arguments","Linking and discourse markers"],
+["Nuance","Phrasal verbs and collocations"],
+["B1 Final Review","Повторение уровня"]
+]
+},
+
+B2:{
+name:"Upper-Intermediate",
+lessons:[
+["Identity & Society","Advanced tense choices"],
+["Workplace Communication","Hedging and diplomatic language"],
+["Media & Bias","Complex passive structures"],
+["Ethics & Decisions","Mixed conditionals"],
+["Science & Progress","Speculation and deduction"],
+["Psychology","Participle clauses"],
+["Culture","Inversion for emphasis"],
+["Politics & Society","Nominalisation"],
+["Technology & AI","Cleft sentences"],
+["Environment","Advanced conditionals"],
+["Education","Academic style"],
+["Language & Power","Register and pragmatics"],
+["Debate","Concession and contrast"],
+["Professional English","Advanced collocations"],
+["B2 Final Review","Итоговое повторение"]
+]
+}
+
+};
+
+/* =========================================================
+   EXTRA CONTENT GENERATOR
+========================================================= */
+
+const vocabByLevel = {
+A1:[
+["hello","привет"],["hi","привет"],["name","имя"],["from","из"],["country","страна"],
+["city","город"],["student","ученик"],["friend","друг"],["nice","приятный"],["meet","встречать"]
+],
+A2:[
+["experience","опыт"],["improve","улучшать"],["decision","решение"],["environment","окружающая среда"],
+["opinion","мнение"],["probably","вероятно"],["although","хотя"],["however","однако"],["journey","путешествие"],["choice","выбор"]
+],
+B1:[
+["achievement","достижение"],["challenge","вызов"],["opportunity","возможность"],["evidence","доказательство"],
+["reliable","надёжный"],["approach","подход"],["impact","влияние"],["issue","проблема"],["require","требовать"],["aware","осведомлённый"]
+],
+B2:[
+["subtle","тонкий"],["conventional","традиционный"],["assumption","предположение"],["consequence","последствие"],
+["perspective","точка зрения"],["controversial","спорный"],["substantial","значительный"],["inevitable","неизбежный"],
+["distinguish","различать"],["justify","обосновывать"]
+]
+};
+
+const grammar = {
+
+A1:{
+title:"Present Simple + verb to be",
+explain:"В английском глагол to be нужен, когда мы говорим, кто мы, где мы, какие мы и откуда мы. В Present Simple обычные действия строятся иначе: I work, you live, she studies.",
+table:[
+["I","am","I am a student."],
+["You / We / They","are","They are from Spain."],
+["He / She / It","is","She is seventeen."]
+],
+rules:[
+"am используется только с I.",
+"is используется с he, she, it.",
+"are используется с you, we, they.",
+"После to be можно поставить имя, профессию, возраст, место или характеристику.",
+"Для обычных действий используем do/does: Do you live here? Does she work?"
+],
+examples:[
+["My name is Anna.","Меня зовут Анна."],
+["I'm from London.","Я из Лондона."],
+["I'm 17.","Мне 17 лет."],
+["She is my friend.","Она моя подруга."]
+]
+},
+
+A2:{
+title:"Present Perfect vs Past Simple",
+explain:"Present Perfect связывает прошлое с настоящим: важен опыт или результат. Past Simple используется, когда законченный момент в прошлом известен или указан.",
+table:[
+["Present Perfect","+ have/has + V3","I have visited Paris."],
+["Negative","haven't/hasn't + V3","She hasn't finished yet."],
+["Question","Have/Has + subject + V3?","Have you ever been there?"],
+["Past Simple","+ V2","I visited Paris last year."]
+],
+rules:[
+"Используй Present Perfect с ever, never, already, yet, just, recently.",
+"Используй Past Simple с yesterday, last week, in 2024, two days ago.",
+"Present Perfect не используется с конкретным законченным временем в прошлом.",
+"Смысл важнее механического поиска маркера времени."
+],
+examples:[
+["I've never tried sushi.","Я никогда не пробовала суши."],
+["I tried sushi yesterday.","Я попробовала суши вчера."],
+["Have you ever travelled alone?","Ты когда-нибудь путешествовала одна?"]
+]
+},
+
+B1:{
+title:"Narrative tenses",
+explain:"В рассказах разные прошедшие времена выполняют разные функции. Past Simple двигает сюжет вперёд, Past Continuous показывает фон или процесс, Past Perfect показывает событие, которое произошло раньше другого прошлого события.",
+table:[
+["Past Simple","V2","The train arrived."],
+["Past Continuous","was/were + V-ing","I was waiting."],
+["Past Perfect","had + V3","She had already left."]
+],
+rules:[
+"Past Simple = главное завершённое событие.",
+"Past Continuous = действие было в процессе.",
+"Past Perfect = действие произошло раньше другого момента в прошлом.",
+"В одном рассказе времена могут сочетаться."
+],
+examples:[
+["I was walking home when it started raining.","Я шла домой, когда начался дождь."],
+["She had left before I arrived.","Она ушла до того, как я приехала."],
+["He opened the door and looked inside.","Он открыл дверь и заглянул внутрь."]
+]
+},
+
+B2:{
+title:"Hedging and diplomatic language",
+explain:"На B2 важно не только быть грамматически правильной, но и выбирать степень уверенности. Hedging позволяет сделать утверждение осторожнее: возможно, вероятно, кажется, что.",
+table:[
+["Strong","This is wrong.","Это неправильно."],
+["Hedged","This may be inaccurate.","Возможно, это неточно."],
+["Stronger possibility","This is likely to be inaccurate.","Вероятно, это неточно."],
+["Soft opinion","It seems that...","Кажется, что..."]
+],
+rules:[
+"may/might/could выражают возможность.",
+"seem/appear помогают смягчить утверждение.",
+"likely to указывает на высокую вероятность.",
+"Hedging особенно полезен в академическом и профессиональном английском."
+],
+examples:[
+["This may be caused by several factors.","Возможно, это вызвано несколькими факторами."],
+["It seems that the situation is changing.","Кажется, ситуация меняется."],
+["This is likely to affect the results.","Вероятно, это повлияет на результаты."]
+]
+}
+
+};
+
+/* =========================================================
+   AUTH
+========================================================= */
+
+const avatarsEl = document.getElementById("avatars");
+
+AVATARS.forEach(a=>{
+  const b=document.createElement("button");
+  b.className="avatar-choice"+(a===selectedAvatar?" selected":"");
+  b.textContent=a;
+  b.onclick=()=>{
+    selectedAvatar=a;
+    document.querySelectorAll(".avatar-choice").forEach(x=>x.classList.remove("selected"));
+    b.classList.add("selected");
+  };
+  avatarsEl.appendChild(b);
+});
+
+for(let i=12;i<=70;i++){
+  const o=document.createElement("option");
+  o.value=i;
+  o.textContent=i;
+  document.getElementById("age").appendChild(o);
+}
+
+function register(){
+  const nickname=document.getElementById("nickname").value.trim();
+  const password=document.getElementById("password").value;
+  const age=document.getElementById("age").value;
+
+  if(nickname.length<2){
+    toast("Введите nickname хотя бы из 2 символов.");
+    return;
+  }
+
+  if(password.length<4){
+    toast("Пароль должен содержать минимум 4 символа.");
+    return;
+  }
+
+  if(!age){
+    toast("Выберите возраст.");
+    return;
+  }
+
+  user=defaultUser();
+  user.nickname=nickname;
+  user.password=password;
+  user.age=age;
+  user.avatar=selectedAvatar;
+
+  saveUser();
+  enterApp();
+}
+
+function enterApp(){
+  document.getElementById("auth").classList.add("hidden");
+  document.getElementById("app").classList.remove("hidden");
+  document.getElementById("miniName").textContent=user.nickname;
+  document.getElementById("miniAvatar").textContent=user.avatar;
+  showHome();
+}
+
+function logout(){
+  location.reload();
+}
+
+if(user){
+  selectedAvatar=user.avatar;
+  enterApp();
+}
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function toggleSidebar(){
+  document.getElementById("sidebar").classList.toggle("open");
+}
+
+function render(html){
+  document.getElementById("content").innerHTML=html;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function showHome(){
+
+  const totalLessons=60;
+  const completed=Object.values(user.lessons).filter(x=>x.completed).length;
+  const percent=Math.round(completed/totalLessons*100);
+
+  render(`
+    <section class="hero">
+      <div class="kicker">BUSINKA ENGLISH CLUB</div>
+      <h1>English, but make it actually fun.</h1>
+      <p>
+        Здесь ты не угадываешь, какое слово «относится к теме».
+        Ты реально читаешь, пишешь, переводишь, говоришь и работаешь с грамматикой.
+        Humanity survives another language-learning platform.
+      </p>
+      <button class="btn" onclick="showPlacement()">Пройти тест уровня →</button>
+    </section>
+
+    <div class="grid">
+      <div class="card">
+        <div class="stat-number">${percent}%</div>
+        <h3>Общий прогресс</h3>
+        <div class="progress"><i style="width:${percent}%"></i></div>
+        <p>${completed} из ${totalLessons} уроков завершено.</p>
+      </div>
+
+      <div class="card">
+        <div class="stat-number">${user.dictionary.length}</div>
+        <h3>Слов в словарике</h3>
+        <p>Новые слова автоматически сохраняются после изучения уроков.</p>
+      </div>
+
+      <div class="card">
+        <div class="stat-number">${user.achievements.length}</div>
+        <h3>Достижения</h3>
+        <p>Безошибочные уроки дают achievement.</p>
+      </div>
+    </div>
+
+    <h2 style="margin-top:35px">Choose your level</h2>
+
+    <div class="level-grid">
+      ${Object.keys(LEVELS).map(l=>{
+        const done=LEVELS[l].lessons.filter((_,i)=>user.lessons[l+"-"+i]?.completed).length;
+        const p=Math.round(done/15*100);
+        return `
+          <div class="card level-card">
+            <div class="big">${l}</div>
+            <h3>${LEVELS[l].name}</h3>
+            <p>${done}/15 уроков</p>
+            <div class="progress"><i style="width:${p}%"></i></div>
+            <button class="btn secondary" style="margin-top:15px" onclick="showLevel('${l}')">Открыть</button>
+          </div>
+        `;
+      }).join("")}
+    </div>
+  `);
+}
+
+function showLevel(level){
+
+  const lessons=LEVELS[level].lessons;
+
+  render(`
+    <div class="lesson-page">
+      <div class="kicker">${level} · ${LEVELS[level].name}</div>
+      <h1 style="font-size:43px">Lessons</h1>
+      <p style="color:#6f879f">
+        Каждый урок содержит теорию, grammar table, vocabulary,
+        examples, real-life English, reading и минимум 10 практических заданий.
+      </p>
+
+      <div class="lesson-list">
+        ${lessons.map((l,i)=>{
+
+          const key=level+"-"+i;
+          const done=user.lessons[key]?.completed;
+          const isTest=[3,7,11,14].includes(i);
+
+          return `
+            <div class="lesson" onclick="${isTest ? `startTest('${level}',${i})` : `openLesson('${level}',${i})`}">
+              <div class="lesson-number">${isTest?"CONTROL TEST":"LESSON "+(i+1)}</div>
+              <h3>${l[0]}</h3>
+              <small>${l[1]}</small>
+              <div style="margin-top:14px">
+                ${done?"✓ Completed":"→ Start"}
+              </div>
+              ${isTest?'<span class="lock">📝</span>':''}
+            </div>
+          `;
+        }).join("")}
+      </div>
+    </div>
+  `);
+}
+
+/* =========================================================
+   THEORY
+========================================================= */
+
+function theoryFor(level,index){
+
+  let g=grammar[level];
+
+  if(index===0) return g;
+
+  const lesson=LEVELS[level].lessons[index];
+
+  return {
+    title:lesson[1],
+    explain:
+      `В этом уроке мы разбираем тему «${lesson[0]}». `+
+      `Сначала поймём правило, затем увидим его в живых примерах и только после этого перейдём к практике.`,
+    table:[
+      ["Affirmative","subject + structure","I / You / She + ..."],
+      ["Negative","subject + negative form","I don't / She doesn't / ..."],
+      ["Question","auxiliary + subject + ...","Do you...? / Does she...?"]
+    ],
+    rules:[
+      `Сначала определи, что именно выражает предложение.`,
+      `Следи за subject: I, you, he, she, it, we, they.`,
+      `Не переводи английскую конструкцию слово в слово, если структура отличается от русского.`,
+      `Используй лексику урока в собственных примерах.`
+    ],
+    examples:[
+      [`I use this expression in real conversations.`,`Я использую это выражение в реальных разговорах.`],
+      [`She usually asks a follow-up question.`,`Она обычно задаёт уточняющий вопрос.`],
+      [`Do you understand the difference?`,`Ты понимаешь разницу?`]
+    ]
+  };
+}
+
+function renderTheory(level,index){
+
+  const t=theoryFor(level,index);
+
+  return `
+    <div class="section">
+      <div class="section-title">
+        <span>📚</span>
+        <h2>Grammar & Theory</h2>
+      </div>
+
+      <h3>${t.title}</h3>
+
+      <div class="theory">
+        <p>${t.explain}</p>
+      </div>
+
+      <table class="grammar-table">
+        <thead>
+          <tr><th>Форма</th><th>Структура</th><th>Пример</th></tr>
+        </thead>
+        <tbody>
+          ${t.table.map(r=>`
+            <tr>
+              <td><b>${r[0]}</b></td>
+              <td>${r[1]}</td>
+              <td>${r[2]}</td>
+            </tr>
+          `).join("")}
+        </tbody>
+      </table>
+
+      <div class="rule-box">
+        <b>What you need to remember</b>
+        <ul>
+          ${t.rules.map(x=>`<li>${x}</li>`).join("")}
+        </ul>
+      </div>
+
+      <h3>Examples in real English</h3>
+
+      ${t.examples.map(e=>`
+        <div class="example">
+          <strong>${e[0]}</strong><br>
+          ${e[1]}
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+/* =========================================================
+   LESSON
+========================================================= */
+
+function getVocabulary(level,index){
+
+  const base=vocabByLevel[level];
+
+  return base.map((w,i)=>[
+    w[0],
+    w[1],
+    `Lesson ${index+1}`
+  ]);
+}
+
+function getReading(level,index){
+
+  const title=LEVELS[level].lessons[index][0];
+
+  if(level==="A1"){
+    return `
+      <p>
+      My name is Emma and I live in a small city near London.
+      I am a student. Every morning I get up at seven o'clock,
+      have breakfast and walk to school. My best friend lives
+      near my house, so we usually meet before class.
+      </p>
+      <p>
+      At the weekend, I like reading, watching films and going
+      to cafés with my friends. I don't have a car, but I can
+      easily travel around the city by bus.
+      </p>
+    `;
+  }
+
+  if(level==="A2"){
+    return `
+      <p>
+      Last year, Daniel decided to change his daily routine.
+      He had always wanted to become more active, but he rarely
+      had enough energy after work. He started walking every
+      evening and has recently joined a local sports club.
+      </p>
+      <p>
+      The change was not immediate. At first, he found it
+      difficult to stay motivated. However, after several weeks,
+      he noticed that he was sleeping better and feeling more
+      confident.
+      </p>
+    `;
+  }
+
+  if(level==="B1"){
+    return `
+      <p>
+      When Maya arrived at the station, the train had already
+      disappeared around the corner. She had been travelling
+      across the country for nearly six hours, and the delay
+      meant that she would have to wait another hour.
+      </p>
+      <p>
+      Instead of getting angry, she found a quiet café and began
+      writing notes about the trip. Looking back, she realised
+      that the unexpected delay had given her the opportunity
+      to notice details she would normally have missed.
+      </p>
+    `;
+  }
+
+  return `
+    <p>
+      Modern communication increasingly requires people to
+      distinguish between certainty and probability. In a
+      professional environment, an unnecessarily strong claim
+      can sound confident, but it can also make an argument
+      less credible when the available evidence is limited.
+    </p>
+    <p>
+      For this reason, experienced speakers often use cautious
+      language. Rather than presenting every interpretation as
+      an established fact, they indicate degrees of certainty
+      and acknowledge alternative explanations. This does not
+      necessarily weaken an argument. In many contexts, it
+      demonstrates intellectual precision.
+    </p>
+  `;
+}
+
+/* =========================================================
+   TASK GENERATOR
+========================================================= */
+
+function taskTemplates(level,index){
+
+  const lesson=LEVELS[level].lessons[index];
+  const title=lesson[0];
+
+  return [
+
+    {
+      type:"choice",
+      q:`Choose the grammatically correct sentence connected with "${title}".`,
+      options:[
+        "I am from London.",
+        "I is from London.",
+        "I are from London.",
+        "I be from London."
+      ],
+      answer:0
+    },
+
+    {
+      type:"choice",
+      q:"Choose the best translation: «Я живу в этом городе уже два года.»",
+      options:[
+        "I have lived in this city for two years.",
+        "I live this city since two years.",
+        "I am live in this city two years.",
+        "I lived in this city since two years."
+      ],
+      answer:0
+    },
+
+    {
+      type:"input",
+      q:"Complete the sentence: My name □ Anna. Use the correct form of to be.",
+      answer:"is",
+      placeholder:"Type one word"
+    },
+
+    {
+      type:"choice",
+      q:"Choose the correct question.",
+      options:[
+        "Where are you from?",
+        "Where you are from?",
+        "Where from you are?",
+        "Where is you from?"
+      ],
+      answer:0
+    },
+
+    {
+      type:"input",
+      q:"Translate into English: «Я студентка.»",
+      answer:"I am a student.",
+      placeholder:"Write the complete sentence"
+    },
+
+    {
+      type:"input",
+      q:"Translate into Russian: “She is from Canada.”",
+      answer:"Она из Канады.",
+      placeholder:"Напишите перевод"
+    },
+
+    {
+      type:"choice",
+      q:"A friend writes: “Hi! Nice to meet you.” What is the most natural reply?",
+      options:[
+        "Nice to meet you too!",
+        "Nice meet you two!",
+        "I nice meeting you.",
+        "Meet nice you!"
+      ],
+      answer:0
+    },
+
+    {
+      type:"choice",
+      q:"Choose the word that completes the sentence naturally: “I’m □ Moscow.”",
+      options:[
+        "from",
+        "at",
+        "on",
+        "to"
+      ],
+      answer:0
+    },
+
+    {
+      type:"input",
+      q:"Write one complete English sentence introducing yourself. Include your name and where you are from.",
+      answer:"open",
+      placeholder:"Example: My name is Alex. I'm from Spain."
+    },
+
+    {
+      type:"choice",
+      q:"Which sentence is correct in standard English?",
+      options:[
+        "She is seventeen.",
+        "She has seventeen.",
+        "She are seventeen.",
+        "She be seventeen."
+      ],
+      answer:0
+    },
+
+    {
+      type:"reading",
+      q:"Read the text above. Where does Emma live?",
+      options:[
+        "In a small city near London.",
+        "In central London.",
+        "In Manchester.",
+        "In Canada."
+      ],
+      answer:0
+    },
+
+    {
+      type:"choice",
+      q:"Choose the most natural sentence for a real conversation.",
+      options:[
+        "Hi, I'm Alex. What's your name?",
+        "Hi, I Alex. What name you?",
+        "Hello, my is Alex. Your name?",
+        "Hi, Alex am. What are name?"
+      ],
+      answer:0
+    }
+
+  ];
+}
+
+function renderTask(task,i){
+
+  if(task.type==="choice" || task.type==="reading"){
+    return `
+      <div class="task" id="task-${i}">
+        <div class="task-number">Practice ${i+1}</div>
+        <h3>${task.q}</h3>
+        <div class="options">
+          ${task.options.map((o,j)=>`
+            <button class="option" onclick="answerChoice(${i},${j},${task.answer})">${o}</button>
+          `).join("")}
+        </div>
+        <div id="feedback-${i}" class="feedback"></div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="task" id="task-${i}">
+      <div class="task-number">Practice ${i+1}</div>
+      <h3>${task.q}</h3>
+      <input
+        id="input-${i}"
+        class="answer-input"
+        placeholder="${task.placeholder || ""}"
+      >
+      <button class="btn" style="margin-top:10px" onclick="answerInput(${i},'${escapeJS(task.answer)}')">
+        Check
+      </button>
+      <div id="feedback-${i}" class="feedback"></div>
+    </div>
+  `;
+}
+
+function escapeJS(str){
+  return String(str).replace(/\\/g,"\\\\").replace(/'/g,"\\'");
+}
+
+let currentLesson=null;
+let taskResults={};
+
+function openLesson(level,index){
+
+  currentLesson={level,index};
+  taskResults={};
+
+  const lesson=LEVELS[level].lessons[index];
+  const vocab=getVocabulary(level,index);
+  const tasks=taskTemplates(level,index);
+
+  render(`
+    <div class="lesson-page">
+
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">${level} · LESSON ${index+1}</div>
+          <h1>${lesson[0]}</h1>
+          <p style="color:#7189a2">${lesson[1]}</p>
+        </div>
+
+        <div class="businka">
+          <span class="animal">🐱🎀</span>
+          <div class="bubble" id="businkaBubble">
+            Я слежу. Очень внимательно.
+          </div>
+        </div>
+      </div>
+
+      ${renderTheory(level,index)}
+
+      <div class="section">
+        <div class="section-title">
+          <span>🧠</span>
+          <h2>New vocabulary</h2>
+        </div>
+
+        <div class="vocab-grid">
+          ${vocab.map(w=>`
+            <div class="word">
+              <b>${w[0]}</b><br>
+              ${w[1]}
+            </div>
+          `).join("")}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>💬</span>
+          <h2>Real-life English</h2>
+        </div>
+
+        <div class="dialogue">
+          <div class="msg b">
+            🐱 <b>Бусинка:</b> Hi! I don't want a boring textbook answer.
+            Imagine we're actually talking.
+          </div>
+          <div class="msg u">
+            You: Hi! My name is Alex. I'm from London.
+          </div>
+          <div class="msg b">
+            🐱 <b>Бусинка:</b> Much better. This is how people actually
+            use the language.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>📖</span>
+          <h2>Reading</h2>
+        </div>
+
+        <div class="reading">
+          ${getReading(level,index)}
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">
+          <span>✍️</span>
+          <h2>Practice</h2>
+        </div>
+
+        <p style="color:#7189a2">
+          Здесь нет заданий «какое слово принадлежит теме».
+          Каждое упражнение проверяет конкретный навык:
+          grammar, vocabulary, reading, translation или writing.
+        </p>
+
+        ${tasks.map(renderTask).join("")}
+      </div>
+
+      <div class="lesson-footer">
+        <button class="btn secondary" onclick="showLevel('${level}')">← Back</button>
+        <button class="btn" onclick="finishLesson()">Finish lesson</button>
+      </div>
+
+    </div>
+  `);
+}
+
+function answerChoice(taskIndex,choice,correct){
+
+  if(taskResults[taskIndex]) return;
+
+  const buttons=document.querySelectorAll(`#task-${taskIndex} .option`);
+  const feedback=document.getElementById(`feedback-${taskIndex}`);
+
+  taskResults[taskIndex]=choice===correct;
+
+  buttons.forEach((b,i)=>{
+    if(i===correct)b.classList.add("correct");
+    if(i===choice && i!==correct)b.classList.add("wrong");
+    b.disabled=true;
+  });
+
+  if(choice===correct){
+    feedback.className="feedback show good";
+    feedback.textContent=goodPhrases[Math.floor(Math.random()*goodPhrases.length)];
+    businkaMood("happy");
+  }else{
+    feedback.className="feedback show bad";
+    feedback.textContent=badPhrases[Math.floor(Math.random()*badPhrases.length)];
+    businkaMood("angry");
+  }
+}
+
+function normalize(s){
+  return String(s)
+    .toLowerCase()
+    .trim()
+    .replace(/[.!?,]/g,"")
+    .replace(/\s+/g," ");
+}
+
+function answerInput(taskIndex,correct){
+
+  if(taskResults[taskIndex])return;
+
+  const input=document.getElementById(`input-${taskIndex}`);
+  const feedback=document.getElementById(`feedback-${taskIndex}`);
+
+  if(!input.value.trim()){
+    toast("Напиши ответ, genius. Пустое поле не считается.");
+    return;
+  }
+
+  if(correct==="open"){
+    taskResults[taskIndex]=true;
+    feedback.className="feedback show good";
+    feedback.textContent="Ответ принят. Writing practice completed. ✦";
+    input.disabled=true;
+    businkaMood("happy");
+    return;
+  }
+
+  const ok=normalize(input.value)===normalize(correct);
+  taskResults[taskIndex]=ok;
+
+  feedback.className="feedback show "+(ok?"good":"bad");
+
+  if(ok){
+    feedback.textContent=goodPhrases[Math.floor(Math.random()*goodPhrases.length)];
+    businkaMood("happy");
+    input.disabled=true;
+  }else{
+    feedback.textContent=badPhrases[Math.floor(Math.random()*badPhrases.length)];
+    businkaMood("angry");
+  }
+}
+
+function businkaMood(mood){
+  const b=document.getElementById("businkaBubble");
+  if(!b)return;
+
+  if(mood==="happy"){
+    b.textContent=goodPhrases[Math.floor(Math.random()*goodPhrases.length)];
+  }else{
+    b.textContent=badPhrases[Math.floor(Math.random()*badPhrases.length)];
+  }
+}
+
+/* =========================================================
+   LESSON COMPLETION
+========================================================= */
+
+function finishLesson(){
+
+  const total=Object.keys(taskResults).length;
+  const correct=Object.values(taskResults).filter(Boolean).length;
+
+  if(total<10){
+    toast("Сначала выполни задания.");
+    return;
+  }
+
+  const percent=Math.round(correct/total*100);
+  const key=currentLesson.level+"-"+currentLesson.index;
+
+  if(percent<25){
+    user.lessons[key]={
+      completed:false,
+      score:percent
+    };
+
+    saveUser();
+
+    toast("Меньше 25%. Урок нужно пройти ещё раз.");
+    return;
+  }
+
+  const perfect=percent===100;
+
+  user.lessons[key]={
+    completed:true,
+    score:percent,
+    perfect
+  };
+
+  if(perfect && !user.achievements.includes(key)){
+    user.achievements.push(key);
+  }
+
+  addVocabulary(currentLesson.level,currentLesson.index);
+  saveUser();
+
+  render(`
+    <div class="lesson-page">
+      <div class="hero">
+        <div class="kicker">LESSON COMPLETE</div>
+        <h1>${perfect?"Без ошибок. Серьёзно? 💎":"Урок завершён."}</h1>
+        <p>
+          Твой результат: <b>${percent}%</b>.
+          ${perfect
+            ?"Бусинка официально впечатлена."
+            :"Главное, что порог пройден. Следующий урок ждёт."
+          }
+        </p>
+        <button class="btn" onclick="showLevel('${currentLesson.level}')">
+          Вернуться к урокам
+        </button>
+      </div>
+    </div>
+  `);
+}
+
+function addVocabulary(level,index){
+
+  getVocabulary(level,index).forEach(w=>{
+    if(!user.dictionary.some(x=>x.word===w[0])){
+      user.dictionary.push({
+        word:w[0],
+        translation:w[1],
+        level
+      });
+    }
+  });
+}
+
+/* =========================================================
+   CONTROL TESTS
+========================================================= */
+
+function startTest(level,index){
+
+  const testNumber=index===3?1:index===7?2:index===11?3:4;
+
+  const previousStart=(testNumber-1)*4;
+  const covered=LEVELS[level].lessons
+    .slice(previousStart,index)
+    .map(x=>x[0]);
+
+  const questions=[];
+
+  for(let i=0;i<20;i++){
+    const lessonName=covered[i%covered.length];
+
+    questions.push({
+      q:`Which sentence is the most grammatically appropriate in the context of "${lessonName}"?`,
+      options:[
+        "I am learning English because I want to communicate more confidently.",
+        "I learning English because I am want communicate.",
+        "I am learn English because I want communicating.",
+        "I learning English because I want to communicated."
+      ],
+      answer:0
+    });
+  }
+
+  render(`
+    <div class="lesson-page">
+
+      <div class="lesson-head">
+        <div>
+          <div class="kicker">${level} · CONTROL TEST ${testNumber}</div>
+          <h1>Progress Check</h1>
+          <p style="color:#7189a2">
+            20 questions · topics:
+            ${covered.join(" · ")}
+          </p>
+        </div>
+
+        <div class="businka">
+          <span class="animal">🐱🎀</span>
+          <div class="bubble">
+            Я всё вижу. И да, здесь 20 заданий.
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        ${questions.map((q,i)=>`
+          <div class="task" id="test-task-${i}">
+            <div class="task-number">Question ${i+1}/20</div>
+            <h3>${q.q}</h3>
+
+            <div class="options">
+              ${q.options.map((o,j)=>`
+                <button class="option"
+                  onclick="testAnswer(${i},${j},${q.answer})">${o}</button>
+              `).join("")}
+            </div>
+
+            <div id="test-feedback-${i}" class="feedback"></div>
+          </div>
+        `).join("")}
+      </div>
+
+      <div class="lesson-footer">
+        <button class="btn secondary" onclick="showLevel('${level}')">← Back</button>
+        <button class="btn" onclick="finishTest('${level}',${index})">Finish test</button>
+      </div>
+
+    </div>
+  `);
+
+  window.currentTestResults={};
+}
+
+function testAnswer(i,choice,correct){
+
+  if(window.currentTestResults[i]!==undefined)return;
+
+  window.currentTestResults[i]=choice===correct;
+
+  const buttons=document.querySelectorAll(`#test-task-${i} .option`);
+  const feedback=document.getElementById(`test-feedback-${i}`);
+
+  buttons.forEach((b,j)=>{
+    if(j===correct)b.classList.add("correct");
+    if(j===choice && j!==correct)b.classList.add("wrong");
+    b.disabled=true;
+  });
+
+  if(choice===correct){
+    feedback.className="feedback show good";
+    feedback.textContent=goodPhrases[Math.floor(Math.random()*goodPhrases.length)];
+  }else{
+    feedback.className="feedback show bad";
+    feedback.textContent=badPhrases[Math.floor(Math.random()*badPhrases.length)];
+  }
+}
+
+function finishTest(level,index){
+
+  const results=window.currentTestResults||{};
+  const answered=Object.keys(results).length;
+
+  if(answered<20){
+    toast("Все 20 вопросов должны быть выполнены.");
+    return;
+  }
+
+  const correct=Object.values(results).filter(Boolean).length;
+  const grade=Math.round(correct/20*5);
+  const passed=grade>=3;
+
+  user.tests[level+"-"+index]={
+    score:correct,
+    grade,
+    passed
+  };
+
+  saveUser();
+
+  render(`
+    <div class="lesson-page">
+      <div class="hero">
+        <div class="kicker">CONTROL TEST RESULT</div>
+        <h1>${passed?"Test passed.":"Needs another round."}</h1>
+        <p>
+          Результат: ${correct}/20 · школьная оценка: <b>${grade}/5</b>.
+        </p>
+        <p>
+          ${passed
+            ?"Следующие темы открыты. Keep going."
+            :"Оценка ниже 3. Повтори предыдущие темы и попробуй контрольную снова."
+          }
+        </p>
+        <button class="btn" onclick="showLevel('${level}')">Вернуться</button>
+      </div>
+    </div>
+  `);
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function showProfile(){
+
+  const total=60;
+  const completed=Object.values(user.lessons).filter(x=>x.completed).length;
+
+  render(`
+    <div class="lesson-page">
+
+      <div class="hero">
+        <div class="kicker">YOUR PROFILE</div>
+        <h1>${user.avatar} ${user.nickname}</h1>
+        <p>Возраст: ${user.age} · Current level: ${user.level}</p>
+      </div>
+
+      <div class="grid">
+
+        <div class="card">
+          <div class="stat-number">${Math.round(completed/total*100)}%</div>
+          <h3>Overall progress</h3>
+          <div class="progress">
+            <i style="width:${Math.round(completed/total*100)}%"></i>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="stat-number">${completed}</div>
+          <h3>Lessons completed</h3>
+          <p>Из 60 доступных уроков.</p>
+        </div>
+
+        <div class="card">
+          <div class="stat-number">${user.achievements.length}</div>
+          <h3>Achievements</h3>
+          <p>Perfect lessons.</p>
+        </div>
+
+      </div>
+
+      <div class="section">
+        <h2>Level statistics</h2>
+
+        ${Object.keys(LEVELS).map(level=>{
+          const done=LEVELS[level].lessons.filter((_,i)=>user.lessons[level+"-"+i]?.completed).length;
+          const p=Math.round(done/15*100);
+
+          return `
+            <div style="margin:20px 0">
+              <div style="display:flex;justify-content:space-between;margin-bottom:7px">
+                <b>${level}</b>
+                <span>${done}/15 · ${p}%</span>
+              </div>
+              <div class="progress"><i style="width:${p}%"></i></div>
+            </div>
+          `;
+        }).join("")}
+      </div>
+
+      <div class="section">
+        <h2>Achievements</h2>
+
+        <div class="badge-list">
+          ${
+            user.achievements.length
+            ? user.achievements.map(a=>`
+                <div class="badge">💎 ${a}</div>
+              `).join("")
+            : `<div class="empty">Пока пусто. Perfect lesson awaits.</div>`
+          }
+        </div>
+      </div>
+
+    </div>
+  `);
+}
+
+/* =========================================================
+   DICTIONARY
+========================================================= */
+
+function showDictionary(){
+
+  render(`
+    <div class="lesson-page">
+
+      <div class="kicker">PERSONAL DICTIONARY</div>
+      <h1 style="font-size:43px">Your words 📖</h1>
+
+      <div class="section">
+
+        ${
+          user.dictionary.length
+          ? `
+            <div class="dictionary">
+              ${user.dictionary.map(w=>`
+                <div class="word">
+                  <b>${w.word}</b><br>
+                  ${w.translation}<br>
+                  <small style="color:#8ca0b5">${w.level}</small>
+                </div>
+              `).join("")}
+            </div>
+          `
+          : `<div class="empty">Здесь пока пусто. Пройди первый урок.</div>`
         }
-        function getCorrectAnswerText(task) {
-            return typeof task.correct === 'number' ? task.options[task.correct] : task.correct;
-        }
 
-        // ========== РЕНДЕРИНГ ==========
-        function render() { const app = document.getElementById('app'); switch (currentScreen) { case 'login': renderLogin(app); break; case 'register': renderRegister(app); break; case 'welcome': renderWelcome(app); break; case 'main': renderMain(app); break; case 'level': renderLevel(app); break; case 'lesson': renderLesson(app); break; case 'test': renderTest(app); break; case 'profile': renderProfile(app); break; case 'vocabulary': renderVocabulary(app); break; default: renderLogin(app); } }
+      </div>
 
-        function renderLogin(app) { app.innerHTML = `<h1>🐱 Пухля English</h1><p class="subtitle">Учи английский с самым милым котиком!</p><div class="grid" style="max-width: 400px; margin: 0 auto;"><div class="card"><h3>Вход</h3><input type="text" id="loginNick" placeholder="Ник"><input type="password" id="loginPassword" placeholder="Пароль"><button class="btn" onclick="handleLogin()">Войти</button><p style="margin-top: 15px;">Нет аккаунта? <a href="#" onclick="showScreen('register'); return false;">Зарегистрироваться</a></p></div></div>`; }
-        function renderRegister(app) { app.innerHTML = `<h1>🐱 Регистрация</h1><p class="subtitle">Создай свой профиль и начни учиться!</p><div class="grid" style="max-width: 500px; margin: 0 auto;"><div class="card"><h3>Придумай ник и пароль</h3><input type="text" id="regNick" placeholder="Ник"><input type="password" id="regPassword" placeholder="Пароль"><input type="text" id="regName" placeholder="Твоё имя"><input type="number" id="regAge" placeholder="Возраст" min="1" max="120"><h3 style="margin-top: 15px;">Выбери аватарку (друг Пухли)</h3><div class="avatar-select">${AVATARS.map((a, i) => `<span class="avatar-option" data-index="${i}" onclick="selectAvatar(${i})" title="${AVATAR_NAMES[i]}">${a}</span>`).join('')}</div><button class="btn btn-purple" style="margin-top: 20px;" onclick="handleRegister()">Создать аккаунт</button></div></div>`; window.selectedAvatar = 0; }
-        function selectAvatar(index) { window.selectedAvatar = index; document.querySelectorAll('.avatar-option').forEach((el, i) => el.classList.toggle('selected', i === index)); }
-        function renderWelcome(app) { app.innerHTML = `<div class="character-box fade-in"><div class="character-face">🐱</div><div class="speech-bubble"><p>Приятно познакомиться, ${currentUser.name}! А я Пухля :)<br>Do you speak English?</p><p style="margin-top: 10px; color: #888;">Тебе ${currentUser.age} лет. Отличный возраст для изучения английского!</p></div></div><div style="text-align: center;"><button class="btn" onclick="showScreen('main')">Начать обучение →</button></div>`; }
-        function renderMain(app) { const totalMedals = getTotalMedals(); const levels = ['A1', 'A2', 'B1', 'B2']; const levelEmojis = { A1: '🌱', A2: '🌿', B1: '🌳', B2: '🌲' }; const levelNames = { A1: 'Beginner', A2: 'Elementary', B1: 'Intermediate', B2: 'Upper-Intermediate' }; app.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;"><div><h1>Привет, ${currentUser.name}! ${currentUser.avatar}</h1><p class="subtitle">Твой прогресс: ${totalMedals} медалей</p></div><div><button class="btn btn-secondary" onclick="showScreen('profile')">👤 Профиль</button><button class="btn btn-purple" onclick="showScreen('vocabulary')">📖 Словарик</button><button class="btn" onclick="logout()">Выйти</button></div></div><div class="grid">${levels.map(level => { const progress = getLevelProgress(level); const completed = currentUser.progress[level].completedLessons.length; const total = lessonsData[level].length; return `<div class="card" onclick="showScreen('level', '${level}')"><h3>${levelEmojis[level]} Уровень ${level}</h3><p>${levelNames[level]}</p><div class="progress-bar"><div class="progress-fill" style="width: ${progress}%"></div></div><p>${completed} / ${total} уроков · ${progress}%</p></div>`; }).join('')}</div><div class="character-box" style="margin-top: 30px;"><div class="character-face">🐱</div><div class="speech-bubble"><p>${getRandomPhrase(thinkingPhrases)}</p></div></div>`; }
-        function renderLevel(app) { const level = currentLevel; const lessons = lessonsData[level]; const completed = currentUser.progress[level].completedLessons; const medals = currentUser.progress[level].medals; const testScores = currentUser.progress[level].testScores; app.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center;"><h1>Уровень ${level}</h1><button class="btn" onclick="showScreen('main')">← Назад</button></div><div class="progress-bar" style="margin: 15px 0;"><div class="progress-fill" style="width: ${getLevelProgress(level)}%"></div></div><p>Пройдено: ${completed.length} из ${lessons.length} блоков</p><div class="grid">${lessons.map((lesson, i) => { const isDone = completed.includes(lesson.id); const medal = medals.find(m => m.lessonId === lesson.id); const blockNum = Math.floor(i / 3) + 1; return `<div class="card" onclick="openLesson('${level}', '${lesson.id}')"><h3>${lesson.emoji} ${lesson.title} ${isDone ? '✅' : ''}</h3><p>Блок ${blockNum}</p>${medal ? `<span class="medal">${medal.emoji}</span>` : ''}</div>`; }).join('')}</div>${lessons.length > 0 && lessons.length % 3 === 0 ? `<h3 style="margin-top: 30px;">Контрольные работы</h3><p>Пройди контрольную после каждых 3 блоков, чтобы получить оценку от 2 до 5.</p><div class="grid">${Array.from({ length: Math.ceil(lessons.length / 3) }, (_, i) => { const blockLessons = getLessonIdsForBlock(level, i); const allDone = blockLessons.every(id => completed.includes(id)); const score = testScores.filter(t => t.lessonIds.some(id => blockLessons.includes(id))).slice(-1)[0]; return `<div class="card"><h3>Контрольная ${i + 1}</h3><p>По блокам ${i * 3 + 1}-${i * 3 + 3}</p>${score ? `<p>Оценка: <span class="score-${score.grade}">${score.grade}</span> (${score.score}/${score.maxScore})</p>` : ''}${allDone ? `<button class="btn btn-purple" onclick="startTest('${level}', ${i})">Пройти контрольную</button>` : '<p style="color:#888;">Сначала пройди все 3 блока</p>'}</div>`; }).join('')}</div>` : ''}<h3 style="margin-top: 30px;">Проверочная работа (по желанию)</h3><p>Пройди тест по всем пройденным блокам этого уровня.</p><button class="btn btn-secondary" onclick="startOptionalTest('${level}')">Начать проверочную</button>`; }
+    </div>
+  `);
+}
 
-        function renderLesson(app) { const level = currentLevel; const lesson = lessonsData[level].find(l => l.id === currentLesson); if (!lesson) { showScreen('level'); return; } const isDone = currentUser.progress[level].completedLessons.includes(lesson.id); let contentHTML = `<div style="display: flex; justify-content: space-between; align-items: center;"><h1>${lesson.emoji} ${lesson.title}</h1><button class="btn" onclick="showScreen('level')">← Назад</button></div><div class="lesson-content"><h4>📚 Новая лексика</h4><table class="vocab-table"><tr><th>Английский</th><th>Русский</th><th>Пример</th></tr>${lesson.vocabulary.map(v => `<tr><td>${v.en}</td><td>${v.ru}</td><td>${v.example}</td></tr>`).join('')}</table><h4>📐 Грамматика</h4><p>${lesson.grammar}</p><h4>💬 Примеры</h4><ul>${lesson.examples.map(e => `<li>${e}</li>`).join('')}</ul><h4>🤔 Интересный факт</h4><p>${lesson.funFact}</p><h4>💡 Совет</h4><p>${lesson.tip}</p></div>${isDone ? '<p style="text-align:center; color:green;">✅ Урок пройден! Можешь повторить или идти дальше.</p>' : ''}`; if (!isTestMode) { contentHTML += `<div style="text-align: center;"><button class="btn" onclick="startLessonTasks('${level}', '${lesson.id}')">${isDone ? 'Повторить задания' : 'Начать задания'}</button></div>`; } else { const task = lesson.tasks[currentTaskIndex]; contentHTML += renderTask(task, level, lesson.id); } app.innerHTML = contentHTML; }
+/* =========================================================
+   PLACEMENT TEST
+========================================================= */
 
-        function renderTask(task, level, lessonId) { let taskHTML = `<div class="task-container"><h3>Задание ${currentTaskIndex + 1} из ${lessonsData[level].find(l => l.id === lessonId).tasks.length}</h3><p><strong>${task.question}</strong></p>`; if (task.type === 'flashcards') { taskHTML += `<div style="text-align:center; padding: 20px;">${task.options.map(opt => `<button class="btn" onclick="handleFlashcard('${level}', '${lessonId}')">${opt}</button>`).join('')}</div>`; } else if (task.type === 'multiple_choice' || task.type === 'fill_blank') { taskHTML += `<div class="task-options">${task.options.map((opt, i) => `<div class="task-option" onclick="handleMultipleChoice(${i}, this, '${level}', '${lessonId}')">${opt}</div>`).join('')}</div>`; } else if (task.type === 'translation_ru' || task.type === 'translation_en' || task.type === 'dialogue') { taskHTML += `<input type="text" id="translationInput" placeholder="Введи ответ..."><button class="btn" onclick="handleTranslation('${level}', '${lessonId}')">Проверить</button>`; } else if (task.type === 'word_bank') { taskHTML += `<div class="word-bank" id="wordBank">${shuffleArray(task.words).map(w => `<span onclick="addWordToSentence(this, '${w}')">${w}</span>`).join('')}</div><div class="sentence-builder" id="sentenceBuilder"></div><button class="btn" onclick="checkWordBank('${level}', '${lessonId}')">Проверить</button><button class="btn btn-secondary" onclick="clearSentence()">Очистить</button>`; } taskHTML += `</div>`; return taskHTML; }
+function showPlacement(){
 
-        function renderTest(app) { const level = currentLevel; const questions = testQuestions; const currentQ = testAnswers.length; const totalQ = questions.length; if (currentQ >= totalQ) { finishTest(level); return; } const q = questions[currentQ]; app.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center;"><h1>📝 Контрольная работа</h1><span>Вопрос ${currentQ + 1} / ${totalQ}</span></div><div class="progress-bar"><div class="progress-fill" style="width: ${(currentQ / totalQ) * 100}%"></div></div><div class="task-container"><h3>${q.question}</h3>${renderTestTask(q, currentQ)}</div><div class="character-box"><div class="character-face">🐱</div><div class="speech-bubble"><p>${getRandomPhrase(thinkingPhrases)}</p></div></div>`; window.currentTestQuestion = q; window.currentTestIndex = currentQ; }
+  const questions=[
+    {
+      q:"Choose: “My name ___ Anna.”",
+      o:["am","is","are","be"],
+      a:1
+    },
+    {
+      q:"Choose: “I ___ coffee every morning.”",
+      o:["drink","drinks","drinking","drank"],
+      a:0
+    },
+    {
+      q:"Choose: “She ___ to London last year.”",
+      o:["has gone","went","goes","is going"],
+      a:1
+    },
+    {
+      q:"Choose: “I have never ___ sushi.”",
+      o:["eat","ate","eaten","eating"],
+      a:2
+    },
+    {
+      q:"Choose: “If I had more time, I ___ another language.”",
+      o:["learn","will learn","would learn","learned"],
+      a:2
+    },
+    {
+      q:"Choose the most natural sentence.",
+      o:[
+        "It seems that the results may be inaccurate.",
+        "It seem results may inaccurate.",
+        "It seems results can inaccurate.",
+        "It seeming that results are inaccurate."
+      ],
+      a:0
+    }
+  ];
 
-        function renderTestTask(q, index) { if (q.type === 'multiple_choice' || q.type === 'fill_blank') { return `<div class="task-options">${q.options.map((opt, i) => `<div class="task-option" onclick="handleTestChoice(${i}, this, ${index})">${opt}</div>`).join('')}</div>`; } else if (q.type === 'translation_ru' || q.type === 'translation_en' || q.type === 'dialogue') { return `<input type="text" id="testTranslationInput" placeholder="Введи ответ..."><button class="btn" onclick="handleTestTranslation(${index})">Проверить</button>`; } else if (q.type === 'word_bank') { return `<div class="word-bank" id="testWordBank">${shuffleArray(q.words).map(w => `<span onclick="addTestWordToSentence(this, '${w}')">${w}</span>`).join('')}</div><div class="sentence-builder" id="testSentenceBuilder"></div><button class="btn" onclick="checkTestWordBank(${index})">Проверить</button><button class="btn btn-secondary" onclick="clearTestSentence()">Очистить</button>`; } else if (q.type === 'flashcards') { return `<div style="text-align:center; padding: 20px;"><button class="btn" onclick="handleTestFlashcard(${index})">Запомнил(а)</button></div>`; } return ''; }
+  render(`
+    <div class="lesson-page">
 
-        function renderProfile(app) { const totalMedals = getTotalMedals(); const totalErrors = Object.values(currentUser.progress).reduce((acc, p) => acc + p.errors.length, 0); const totalTests = Object.values(currentUser.progress).reduce((acc, p) => acc + p.testScores.length, 0); const achievements = Object.values(currentUser.progress).flatMap(p => p.achievements); const errors = Object.values(currentUser.progress).flatMap(p => p.errors.map(e => ({...e, level: Object.keys(currentUser.progress).find(k => currentUser.progress[k].errors.includes(e))}))); let medalsHTML = Object.entries(currentUser.progress).map(([level, p]) => p.medals.length ? p.medals.map(m => `<span class="medal" title="${level}: ${m.title}">${m.emoji}</span>`).join('') : '').join(''); app.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center;"><h1>👤 Профиль</h1><button class="btn" onclick="showScreen('main')">← Назад</button></div><div class="card" style="margin-top: 20px;"><div style="display: flex; align-items: center; gap: 20px;"><div style="font-size: 4em;">${currentUser.avatar}</div><div><h2>${currentUser.name}</h2><p>Ник: ${currentUser.nick} · Возраст: ${currentUser.age}</p><p>Медалей: ${totalMedals} · Пройдено тестов: ${totalTests} · Ошибок: ${totalErrors}</p></div></div></div><div class="grid" style="margin-top: 20px;">${['A1', 'A2', 'B1', 'B2'].map(level => `<div class="card"><h3>Уровень ${level}</h3><div class="progress-bar"><div class="progress-fill" style="width: ${getLevelProgress(level)}%"></div></div><p>${getLevelProgress(level)}%</p></div>`).join('')}</div><div class="tab-nav"><button class="active" onclick="switchProfileTab(this, 'achievements')">🏆 Достижения</button><button onclick="switchProfileTab(this, 'errors')">❌ Ошибки</button><button onclick="switchProfileTab(this, 'tips')">💡 Советы</button></div><div id="profileTabContent"><h3>🏆 Твои достижения</h3><div class="achievement-log">${achievements.length > 0 ? achievements.map(a => `<p>${a.text} (${new Date(a.date).toLocaleDateString()})</p>`).join('') : '<p>Пока нет достижений. Начни учиться!</p>'}</div>${medalsHTML ? `<div style="margin-top: 15px;">${medalsHTML}</div>` : ''}</div>`; window.profileTab = 'achievements'; }
+      <div class="hero">
+        <div class="kicker">PLACEMENT TEST</div>
+        <h1>Let's see where you actually are.</h1>
+        <p>
+          Тест не пытается тебя поймать на случайном слове.
+          Он проверяет грамматические конструкции от A1 до B2.
+        </p>
+      </div>
 
-        function switchProfileTab(btn, tab) { document.querySelectorAll('.tab-nav button').forEach(b => b.classList.remove('active')); btn.classList.add('active'); window.profileTab = tab; const content = document.getElementById('profileTabContent'); const achievements = Object.values(currentUser.progress).flatMap(p => p.achievements); const errors = Object.values(currentUser.progress).flatMap(p => p.errors.map(e => ({...e, level: Object.keys(currentUser.progress).find(k => currentUser.progress[k].errors.includes(e))}))); if (tab === 'achievements') { content.innerHTML = `<h3>🏆 Твои достижения</h3><div class="achievement-log">${achievements.length > 0 ? achievements.map(a => `<p>${a.text} (${new Date(a.date).toLocaleDateString()})</p>`).join('') : '<p>Пока нет достижений.</p>'}</div>`; } else if (tab === 'errors') { content.innerHTML = `<h3>❌ Анализ ошибок</h3>${errors.length > 0 ? errors.map(e => `<div class="error-log"><p><strong>Вопрос:</strong> ${e.question}</p><p><strong>Твой ответ:</strong> ${e.userAnswer}</p><p><strong>Правильный ответ:</strong> ${e.correctAnswer}</p><p><small>${new Date(e.date).toLocaleString()}</small></p></div>`).join('') : '<p>Ошибок пока нет. Ты супер!</p>'}`; } else if (tab === 'tips') { content.innerHTML = `<h3>💡 Советы и факты</h3><div class="lesson-content">${tips.map(t => `<p>${t}</p>`).join('<hr>')}</div>`; } }
+      <div class="section">
+        ${questions.map((q,i)=>`
+          <div class="task" id="placement-${i}">
+            <div class="task-number">Question ${i+1}</div>
+            <h3>${q.q}</h3>
+            <div class="options">
+              ${q.o.map((x,j)=>`
+                <button class="option"
+                  onclick="placementAnswer(${i},${j},${q.a})">${x}</button>
+              `).join("")}
+            </div>
+          </div>
+        `).join("")}
 
-        function renderVocabulary(app) { const allVocab = Object.entries(currentUser.progress).flatMap(([level, p]) => p.vocabulary.map(v => ({...v, level}))); app.innerHTML = `<div style="display: flex; justify-content: space-between; align-items: center;"><h1>📖 Словарик</h1><button class="btn" onclick="showScreen('main')">← Назад</button></div><p>Изученные слова: ${allVocab.length}</p><div class="lesson-content">${allVocab.length > 0 ? `<table class="vocab-table"><tr><th>Слово</th><th>Перевод</th><th>Пример</th><th>Уровень</th></tr>${allVocab.map(v => `<tr><td>${v.en}</td><td>${v.ru}</td><td>${v.example}</td><td>${v.level}</td></tr>`).join('')}</table>` : '<p>Словарик пуст. Проходи уроки, чтобы добавлять слова!</p>'}</div>`; }
+        <button class="btn" onclick="finishPlacement()">Calculate level</button>
+      </div>
 
-        // ========== ОБРАБОТЧИКИ СОБЫТИЙ ==========
-        function handleLogin() { const nick = document.getElementById('loginNick').value.trim(); const password = document.getElementById('loginPassword').value; const user = login(nick, password); if (user) { currentUser = user; showScreen('main'); } else { alert('Неверный ник или пароль!'); } }
-        function handleRegister() { const nick = document.getElementById('regNick').value.trim(); const password = document.getElementById('regPassword').value; const name = document.getElementById('regName').value.trim(); const ageInput = document.getElementById('regAge').value; const age = parseInt(ageInput, 10); if (!nick || !password || !name || !ageInput) { alert('Заполни все поля!'); return; } if (isNaN(age) || age < 1 || age > 120) { alert('Возраст должен быть числом от 1 до 120!'); return; } if (users.find(u => u.nick === nick)) { alert('Такой ник уже занят!'); return; } const avatarIndex = window.selectedAvatar || 0; const user = register(nick, password, name, age, AVATARS[avatarIndex]); showScreen('welcome'); }
-        function logout() { currentUser = null; showScreen('login'); }
-        function openLesson(level, lessonId) { currentLevel = level; currentLesson = lessonId; currentTaskIndex = 0; isTestMode = false; showScreen('lesson'); }
-        function startLessonTasks(level, lessonId) { currentLevel = level; currentLesson = lessonId; currentTaskIndex = 0; isTestMode = true; showScreen('lesson'); }
+    </div>
+  `);
 
-        function handleFlashcard(level, lessonId) { nextTask(level, lessonId, true); }
+  window.placementResults={};
+}
 
-        function handleMultipleChoice(index, element, level, lessonId) {
-            const task = lessonsData[level].find(l => l.id === lessonId).tasks[currentTaskIndex];
-            const isCorrect = isCorrectAnswer(task, index);
-            element.classList.add(isCorrect ? 'correct' : 'wrong');
-            if (!isCorrect) {
-                document.querySelectorAll('.task-option').forEach((el, i) => { if (i === getCorrectAnswerText(task)) el.classList.add('correct'); });
-                addError(level, task.question, getCorrectAnswerText(task), task.options[index], lessonId);
-                showReaction(false, level);
-            } else {
-                showReaction(true, level);
-            }
-            setTimeout(() => nextTask(level, lessonId, isCorrect), 1500);
-        }
+function placementAnswer(i,j,a){
 
-        function handleTranslation(level, lessonId) {
-            const input = document.getElementById('translationInput');
-            const answer = input.value.trim().toLowerCase();
-            const task = lessonsData[level].find(l => l.id === lessonId).tasks[currentTaskIndex];
-            const correctAnswers = [task.correct.toLowerCase(), ...(task.accept || []).map(a => a.toLowerCase())];
-            const isCorrect = correctAnswers.includes(answer);
-            if (isCorrect) {
-                showReaction(true, level);
-                setTimeout(() => nextTask(level, lessonId, true), 1500);
-            } else {
-                addError(level, task.question, task.correct, answer, lessonId);
-                showReaction(false, level);
-                input.style.borderColor = '#ff6b6b';
-                setTimeout(() => { input.style.borderColor = ''; input.value = ''; }, 1500);
-            }
-        }
+  if(window.placementResults[i]!==undefined)return;
 
-        function addWordToSentence(element, word) { const builder = document.getElementById('sentenceBuilder'); const span = document.createElement('span'); span.textContent = word; span.style.cursor = 'pointer'; span.onclick = function() { this.remove(); }; builder.appendChild(span); element.style.opacity = '0.3'; element.style.pointerEvents = 'none'; window.sentenceWords = window.sentenceWords || []; window.sentenceWords.push(word); }
-        function clearSentence() { const builder = document.getElementById('sentenceBuilder'); builder.innerHTML = ''; document.querySelectorAll('.word-bank span').forEach(el => { el.style.opacity = '1'; el.style.pointerEvents = 'auto'; }); window.sentenceWords = []; }
-        function checkWordBank(level, lessonId) { const task = lessonsData[level].find(l => l.id === lessonId).tasks[currentTaskIndex]; const builder = document.getElementById('sentenceBuilder'); const words = Array.from(builder.querySelectorAll('span')).map(s => s.textContent); const sentence = words.join(' ').toLowerCase(); const isCorrect = sentence === task.correctSentence.toLowerCase(); if (isCorrect) { showReaction(true, level); setTimeout(() => nextTask(level, lessonId, true), 1500); } else { addError(level, task.question, task.correctSentence, sentence, lessonId); showReaction(false, level); clearSentence(); } }
+  window.placementResults[i]=j===a;
 
-        function nextTask(level, lessonId, correct) {
-            const lesson = lessonsData[level].find(l => l.id === lessonId);
-            if (correct && currentTaskIndex < lesson.tasks.length - 1) {
-                currentTaskIndex++;
-                renderLesson(document.getElementById('app'));
-            } else if (currentTaskIndex >= lesson.tasks.length - 1) {
-                if (isTestMode) {
-                    completeLesson(level, lessonId);
-                    isTestMode = false;
-                    showModal(`<h2>🎉 Урок пройден!</h2><p>Ты получил медаль: ${lesson.emoji} ${lesson.title}</p><button class="btn" onclick="closeModal(); showScreen('level');">Отлично!</button>`);
-                    confetti();
-                } else {
-                    showModal(`<h2>📚 Урок просмотрен</h2><p>Теперь попробуй выполнить задания!</p><button class="btn" onclick="closeModal(); startLessonTasks('${level}', '${lessonId}');">Начать задания</button>`);
-                }
-            } else {
-                renderLesson(document.getElementById('app'));
-            }
-        }
+  document.querySelectorAll(`#placement-${i} .option`).forEach((b,k)=>{
+    if(k===a)b.classList.add("correct");
+    if(k===j && k!==a)b.classList.add("wrong");
+    b.disabled=true;
+  });
+}
 
-        function showReaction(isCorrect, level) {
-            let face = isCorrect ? '😻' : '😾';
-            let phrase = isCorrect ? getRandomPhrase(positivePhrases) : getRandomPhrase(negativePhrases);
-            const r = Math.random();
-            let extraChar = '';
-            if (r < 0.2) extraChar = `<p style="margin-top: 10px;">${getRandomPhrase(maryPhrases)}</p>`;
-            else if (r < 0.4) extraChar = `<p style="margin-top: 10px;">${getRandomPhrase(jackPhrases)}</p>`;
-            showModal(`<div style="font-size: 4em;">${face}</div><p style="font-size: 1.3em; margin: 15px 0;">${phrase}</p>${extraChar}<button class="btn" onclick="closeModal()">Продолжить</button>`);
-        }
+function finishPlacement(){
 
-        function startTest(level, blockIndex) { currentLevel = level; const lessonIds = getLessonIdsForBlock(level, blockIndex); testQuestions = generateTest(level, lessonIds); testAnswers = []; score = 0; isTestMode = true; testLessonIds = lessonIds; showScreen('test'); }
-        function startOptionalTest(level) { currentLevel = level; const completed = currentUser.progress[level].completedLessons; if (completed.length === 0) { alert('Сначала пройди хотя бы один урок!'); return; } testQuestions = generateTest(level, completed); testAnswers = []; score = 0; isTestMode = true; testLessonIds = completed; showScreen('test'); }
+  const r=window.placementResults||{};
+  const score=Object.values(r).filter(Boolean).length;
 
-        function handleTestChoice(index, element, qIndex) {
-            const q = testQuestions[qIndex];
-            const isCorrect = isCorrectAnswer(q, index);
-            element.classList.add(isCorrect ? 'correct' : 'wrong');
-            if (!isCorrect) {
-                document.querySelectorAll('.task-option').forEach((el, i) => { if (i === getCorrectAnswerText(q)) el.classList.add('correct'); });
-                addError(currentLevel, q.question, getCorrectAnswerText(q), q.options[index], q.lessonId);
-            }
-            testAnswers.push({ question: q, userAnswer: q.options[index], correct: isCorrect });
-            if (isCorrect) score++;
-            setTimeout(() => render(), 1000);
-        }
+  let level="A1";
 
-        function handleTestTranslation(qIndex) { const input = document.getElementById('testTranslationInput'); const answer = input.value.trim().toLowerCase(); const q = testQuestions[qIndex]; const correctAnswers = [q.correct.toLowerCase(), ...(q.accept || []).map(a => a.toLowerCase())]; const isCorrect = correctAnswers.includes(answer); if (!isCorrect) addError(currentLevel, q.question, q.correct, answer, q.lessonId); testAnswers.push({ question: q, userAnswer: answer, correct: isCorrect }); if (isCorrect) score++; render(); }
-        function addTestWordToSentence(element, word) { const builder = document.getElementById('testSentenceBuilder'); const span = document.createElement('span'); span.textContent = word; span.style.cursor = 'pointer'; span.onclick = function() { this.remove(); }; builder.appendChild(span); element.style.opacity = '0.3'; element.style.pointerEvents = 'none'; window.testSentenceWords = window.testSentenceWords || []; window.testSentenceWords.push(word); }
-        function clearTestSentence() { const builder = document.getElementById('testSentenceBuilder'); if (builder) { builder.innerHTML = ''; document.querySelectorAll('.word-bank span').forEach(el => { el.style.opacity = '1'; el.style.pointerEvents = 'auto'; }); window.testSentenceWords = []; } }
-        function checkTestWordBank(qIndex) { const q = testQuestions[qIndex]; const builder = document.getElementById('testSentenceBuilder'); const words = Array.from(builder.querySelectorAll('span')).map(s => s.textContent); const sentence = words.join(' ').toLowerCase(); const isCorrect = sentence === q.correctSentence.toLowerCase(); if (!isCorrect) addError(currentLevel, q.question, q.correctSentence, sentence, q.lessonId); testAnswers.push({ question: q, userAnswer: sentence, correct: isCorrect }); if (isCorrect) score++; render(); }
-        function handleTestFlashcard(qIndex) { testAnswers.push({ question: testQuestions[qIndex], userAnswer: 'Запомнил(а)', correct: true }); score++; render(); }
+  if(score>=5)level="B2";
+  else if(score>=4)level="B1";
+  else if(score>=2)level="A2";
 
-        function finishTest(level) { const maxScore = testQuestions.length; const grade = getGrade(score, maxScore); addTestScore(level, score, maxScore, testLessonIds); const gradeClass = `score-${grade}`; showModal(`<h2>📝 Контрольная завершена!</h2><p class="test-result ${gradeClass}">Оценка: ${grade}</p><p>Правильных ответов: ${score} из ${maxScore}</p>${grade >= 4 ? '<p>Отличная работа! Так держать! 🎉</p>' : '<p>Не расстраивайся, повтори материал и попробуй ещё раз!</p>'}<button class="btn" onclick="closeModal(); showScreen('level');">Вернуться к уровню</button>`); confetti(); isTestMode = false; }
+  user.level=level;
+  user.placementDone=true;
+  saveUser();
 
-        // ========== ИНИЦИАЛИЗАЦИЯ ==========
-        loadData();
-        showScreen('login');
-        document.getElementById('modal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
-        window.showScreen = showScreen;
-        window.handleLogin = handleLogin;
-        window.handleRegister = handleRegister;
-        window.selectAvatar = selectAvatar;
-        window.logout = logout;
-        window.openLesson = openLesson;
-        window.startLessonTasks = startLessonTasks;
-        window.handleFlashcard = handleFlashcard;
-        window.handleMultipleChoice = handleMultipleChoice;
-        window.handleTranslation = handleTranslation;
-        window.addWordToSentence = addWordToSentence;
-        window.clearSentence = clearSentence;
-        window.checkWordBank = checkWordBank;
-        window.startTest = startTest;
-        window.startOptionalTest = startOptionalTest;
-        window.handleTestChoice = handleTestChoice;
-        window.handleTestTranslation = handleTestTranslation;
-        window.addTestWordToSentence = addTestWordToSentence;
-        window.clearTestSentence = clearTestSentence;
-        window.checkTestWordBank = checkTestWordBank;
-        window.handleTestFlashcard = handleTestFlashcard;
-        window.closeModal = closeModal;
-        window.switchProfileTab = switchProfileTab;
-    </script>
+  render(`
+    <div class="lesson-page">
+
+      <div class="hero">
+        <div class="kicker">YOUR RESULT</div>
+        <h1>${level}</h1>
+        <p>
+          Ты набрала ${score}/${Object.keys(r).length}.
+          Стартовый уровень: <b>${level}</b>.
+        </p>
+
+        <button class="btn" onclick="showLevel('${level}')">
+          Начать обучение →
+        </button>
+      </div>
+
+    </div>
+  `);
+}
+
+/* =========================================================
+   UTILS
+========================================================= */
+
+function toast(text){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=text;
+  el.classList.add("show");
+
+  clearTimeout(window.toastTimer);
+
+  window.toastTimer=setTimeout(()=>{
+    el.classList.remove("show");
+  },2800);
+}
+
+</script>
 </body>
 </html>
